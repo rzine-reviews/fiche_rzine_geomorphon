@@ -1,0 +1,59 @@
+---
+title: "Geomorphons"
+subtitle: "Exemple : BV du mont Valier"
+date: "2022-06-27"
+author: 
+ - name: Olivier Theureaux
+   affiliation: UMR LADYSS, CNRS
+image: "featured2.png"
+output: 
+  rzine::readrzine:
+    highlight: kate
+    number_sections: true
+csl: Rzine_citation.csl
+bibliography: biblio.bib
+nocite : |
+  @*
+link_citations: true
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Including Image
+
+<figure class="center">
+  <img src="figures/diachronie_4classes.png" width="700">
+  
+  <figcaption style="font-size:13px;">Analyse diachronique de la parcelle 693. A : Orthophotographie actuelle (2016) ; B :
+Raster historique : classification pixel forêt / pixel non forêt en 1955 ; C : Raster actuel reclassifié :
+classification pixel forêt / pixel non forêt en 2015 ; D : Nouveau raster résultant de la somme du raster
+B et du raster C : Diachronie avec 4 classes présentant la dynamique forestière.  
+  </figcaption>
+
+</figure>
+
+
+
