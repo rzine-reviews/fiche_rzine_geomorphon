@@ -110,7 +110,7 @@ Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'or
 Le découpage des bassins versants provient de la BD Topage® (Bassins versant topographiques - BD Topage - Métropole) qui vise à produire un nouveau référentiel hydrographique français, en remplacement du référentiel BD Carthage®. 
 
 
-# Résultats
+# Méthodologie
 
 ## Création du raster virtuel
 
@@ -139,28 +139,21 @@ bv <- st_read("bv_riberot.shp")
 mnt_bv <- raster::mask(ras, bv, filename = paste0("mnt_bv_riberot", ".tif")
 ```
 
+```
+plot(mnt_bv)
 
-## Données comparatives sur trois bassins versants représentatifs de trois milieux différentes
+```
+
+## Geomorphon
+
 
 Traitement géomorphons : 
 A partir du MNT, on fait tourner l'algorithme Geomorphon avec qgisprocess
 
 
+# Résultats
 
-
-Rendu pour les 3 BV : 
-
-# Statistiques pour les trois bassins versants
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-# Résultats sur le bassin versant du Ribérot
+## Résultats sur le bassin versant du Ribérot (milieu de haute montagne)
 
 <figure class="center">
   <img src="figures/geomorphons_valier.png" width="700">
@@ -170,6 +163,27 @@ classification pixel forêt / pixel non forêt en 2015 ; D : Nouveau raster rés
 B et du raster C : Diachronie avec 4 classes présentant la dynamique forestière*.  
   </figcaption>
 </figure>
+
+## Résultats sur le bassin versant du Morvan (milieu de moyenne montagne)
+
+
+
+## Résultats sur le bassin versant de l'Yvette (milieu de plaine)
+
+
+## Données comparatives sur trois bassins versants représentatifs de trois milieux différentes
+
+Rendu pour les 3 BV : 
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
 
 
 # Bibliographie
