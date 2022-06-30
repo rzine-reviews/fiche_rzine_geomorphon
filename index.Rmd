@@ -109,17 +109,21 @@ Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'or
 
 Le découpage des bassins versants provient de la BD Topage® (Bassins versant topographiques - BD Topage - Métropole) qui vise à produire un nouveau référentiel hydrographique français, en remplacement du référentiel BD Carthage®. 
 
+Nous travaillons sur trois bassins versants : 
+- un bassin versant de haute montagne : Le Ribérot (49 km2)
+- un bassin versant de moyenne montagne : L'Allan de la Savoureuse à la Lizaine
+- un bassn versant de plaine : L'Yvette de sa source au confluent de la Mérantaise (inclus)
 
 # Méthodologie
 
 ## Création du raster virtuel
 
-To do : télécharger les données RGE 5m pour l'Yvette et pour le BV du Morvan. 
+To do : télécharger les données RGE 5m pour l'Yvette et pour le BV de l'Allan.
+
 
 ```
-ras_lst <- list.files(c, full.names = T, pattern = ".asc$") # sélection de toutes les dalles
-head(ras_lst)
-terra::vrt(ras_lst, v, overwrite = T) # création du raster virtuel
+ras_virt <- list.files(c, full.names = T, pattern = ".asc$")    # sélection de toutes les dalles
+terra::vrt(ras_virt, v, overwrite = T)                          # création du raster virtuel
 ras <- raster(v)
 plot(ras)
 ```
@@ -129,6 +133,7 @@ library(terra)
 r <- rast("data/mont_valier.tif")
 plot(r)
 ```
+
 
 ## Découpage du raster par l'emprise d'un bassin versant
 
@@ -150,6 +155,24 @@ plot(mnt_bv)
 Traitement géomorphons : 
 A partir du MNT, on fait tourner l'algorithme Geomorphon avec qgisprocess
 
+```
+mnt <- raster("bv_riberot.tif")
+dem_geomorphons = qgis_run_algorithm("saga:geomorphons", # attention, il faut que l'extension soit active dans QGIS
+                                     DEM = mnt,
+                                     THRESHOLD = 1,
+                                     RADIUS = 5,
+                                     METHOD = 1,
+                                     GEOMORPHONS = paste("geomorphon_riberot_5m_LD5", ".tif"))
+                                     
+geomorphon <- raster("geomorphon_riberot_5m_LD5.tif")
+report_geomorphons = qgis_run_algorithm("native:rasterlayeruniquevaluesreport",
+                                    INPUT = geomorphon,
+                                    BAND = 1,
+                                    OUTPUT_TABLE = paste("rapport_geomorphon_riberot_5m_LD5", ".csv"))
+                                    
+stat <- read.csv("rapport_geomorphon_riberot_5m_LD5.csv")
+data.frame(stat)
+```
 
 # Résultats
 
@@ -186,7 +209,7 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 
 
-# Bibliographie
+# Bibliographie (à revoir)
 
 
 

@@ -155,7 +155,7 @@
       <li><a href="#résultats-sur-le-bassin-versant-de-lyvette-milieu-de-plaine"><span class="toc-section-number">5.3</span> Résultats sur le bassin versant de l’Yvette (milieu de plaine)</a></li>
       <li><a href="#données-comparatives-sur-trois-bassins-versants-représentatifs-de-trois-milieux-différentes"><span class="toc-section-number">5.4</span> Données comparatives sur trois bassins versants représentatifs de trois milieux différentes</a></li>
       </ul></li>
-      <li><a href="#bibliographie">Bibliographie</a></li>
+      <li><a href="#bibliographie-à-revoir">Bibliographie (à revoir)</a></li>
       </ul>
     </div>
     
@@ -238,6 +238,7 @@
 <div id="bd-topage" class="section level3" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> BD Topage®</h3>
 <p>Le découpage des bassins versants provient de la BD Topage® (Bassins versant topographiques - BD Topage - Métropole) qui vise à produire un nouveau référentiel hydrographique français, en remplacement du référentiel BD Carthage®.</p>
+<p>Nous travaillons sur trois bassins versants : - un bassin versant de haute montagne : Le Ribérot (49 km2) - un bassin versant de moyenne montagne : L’Allan de la Savoureuse à la Lizaine - un bassn versant de plaine : L’Yvette de sa source au confluent de la Mérantaise (inclus)</p>
 </div>
 </div>
 </div>
@@ -245,10 +246,9 @@
 <h1><span class="header-section-number">4</span> Méthodologie</h1>
 <div id="création-du-raster-virtuel" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Création du raster virtuel</h2>
-<p>To do : télécharger les données RGE 5m pour l’Yvette et pour le BV du Morvan.</p>
-<pre><code>ras_lst &lt;- list.files(c, full.names = T, pattern = &quot;.asc$&quot;) # sélection de toutes les dalles
-head(ras_lst)
-terra::vrt(ras_lst, v, overwrite = T) # création du raster virtuel
+<p>To do : télécharger les données RGE 5m pour l’Yvette et pour le BV de l’Allan.</p>
+<pre><code>ras_virt &lt;- list.files(c, full.names = T, pattern = &quot;.asc$&quot;)    # sélection de toutes les dalles
+terra::vrt(ras_virt, v, overwrite = T)                          # création du raster virtuel
 ras &lt;- raster(v)
 plot(ras)</code></pre>
 <pre><code>## terra 1.5.12</code></pre>
@@ -265,6 +265,9 @@ mnt_bv &lt;- raster::mask(ras, bv, filename = paste0(&quot;mnt_bv_riberot&quot;,
 <div id="geomorphon" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Geomorphon</h2>
 <p>Traitement géomorphons : A partir du MNT, on fait tourner l’algorithme Geomorphon avec qgisprocess</p>
+<p>mnt &lt;- raster(“bv_riberot.tif”) dem_geomorphons = qgis_run_algorithm(“saga:geomorphons”, # attention, il faut que l’extension soit active dans QGIS DEM = mnt, THRESHOLD = 1, RADIUS = 5, METHOD = 1, GEOMORPHONS = paste(“geomorphon_riberot_5m_LD5”, “.tif”))</p>
+<p>geomorphon &lt;- raster(“geomorphon_riberot_5m_LD5.tif”) report_geomorphons = qgis_run_algorithm(“native:rasterlayeruniquevaluesreport”, INPUT = geomorphon, BAND = 1, OUTPUT_TABLE = paste(“rapport_geomorphon_riberot_5m_LD5”, “.csv”))</p>
+<p>stat &lt;- read.csv(“rapport_geomorphon_riberot_5m_LD5.csv”) data.frame(stat)</p>
 </div>
 </div>
 <div id="résultats" class="section level1" number="5">
@@ -293,8 +296,8 @@ mnt_bv &lt;- raster::mask(ras, bv, filename = paste0(&quot;mnt_bv_riberot&quot;,
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
 </div>
 </div>
-<div id="bibliographie" class="section level1 unnumbered">
-<h1 class="unnumbered">Bibliographie</h1>
+<div id="bibliographie-à-revoir" class="section level1 unnumbered">
+<h1 class="unnumbered">Bibliographie (à revoir)</h1>
 <div id="refs" class="references csl-bib-body">
 <div id="ref-R-rmdformats" class="csl-entry">
 BARNIER, Julien, 2021. <em>rmdformats: HTML Output Formats and Templates for ’rmarkdown’ Documents</em> [en ligne]. S.l. : s.n. Disponible à l&#39;adresse : <a href="https://github.com/juba/rmdformats">https://github.com/juba/rmdformats</a>.
