@@ -146,7 +146,8 @@
       <ul>
       <li><a href="#création-du-raster-virtuel"><span class="toc-section-number">4.1</span> Création du raster virtuel</a></li>
       <li><a href="#découpage-du-raster-par-lemprise-dun-bassin-versant"><span class="toc-section-number">4.2</span> Découpage du raster par l’emprise d’un bassin versant</a></li>
-      <li><a href="#geomorphon"><span class="toc-section-number">4.3</span> Geomorphon</a></li>
+      <li><a href="#le-traitement-geomorphon-détection-des-10-formes-du-paysage"><span class="toc-section-number">4.3</span> Le traitement Geomorphon : détection des 10 formes du paysage</a></li>
+      <li><a href="#statistiques"><span class="toc-section-number">4.4</span> Statistiques</a></li>
       </ul></li>
       <li><a href="#résultats"><span class="toc-section-number">5</span> Résultats</a>
       <ul>
@@ -227,6 +228,7 @@
 <div id="objectifs" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Objectifs</h2>
 <p>Le paysage est un agencement d’éléments abiotiques, biotiques et anthropiques, permettant le développement d’écosystèmes variés (Reynard, 2005). Il est possible de cartographier des unités homogènes en classant le terrain en différents éléments du paysages (Evans <em>et al</em>., 2009). Etudier les formes du paysage permet alors de mieux comprendre la segmentation paysagère.</p>
+<p>A travers l’algorithme Geomorphon nous cherchons à montrer qu’il est possible d’obtenir rapidement et simplement une description des principaux éléments d’un paysage dans différents contexte de pente. Ainsi nous présentons la démarche qui permet d’extraire les formes du paysage d’un bassin versant montagneux, d’un bassin versant de moyenne montagne et d’un bassin versant de plaine.</p>
 </div>
 <div id="données-mobilisées" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Données mobilisées</h2>
@@ -235,10 +237,10 @@
 <p>Le calcul des géomorphons se fait à partir d’un modèle numérique de terrain. Aujourd’hui, l’IGN met à notre disposition des MNT de très grande résolution (1m, 5m) sur l’intégralité du territoire français (source). Nous travaillons sur des MNT à la résolution de 5m (justification?)</p>
 <p>Le MNT permet d’extraire de nombreuses informations : l’altitude, la pente, l’orientation. Il permet également de délimiter le réseau hydrographique, mais aussi différentes indicateurs topographiques : Topographic Wetness Index, Topographic Position Index, etc.</p>
 </div>
-<div id="bd-topage" class="section level3" number="3.2.2">
-<h3><span class="header-section-number">3.2.2</span> BD Topage®</h3>
+<div id="les-bassins-versants-issus-de-la-bd-topage-de-lign-f" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Les bassins versants issus de la BD Topage® de l’IGN-F</h3>
 <p>Le découpage des bassins versants provient de la BD Topage® (Bassins versant topographiques - BD Topage - Métropole) qui vise à produire un nouveau référentiel hydrographique français, en remplacement du référentiel BD Carthage®.</p>
-<p>Nous travaillons sur trois bassins versants : - un bassin versant de haute montagne : Le Ribérot (49 km2) - un bassin versant de moyenne montagne : L’Allan de la Savoureuse à la Lizaine - un bassn versant de plaine : L’Yvette de sa source au confluent de la Mérantaise (inclus)</p>
+<p>Nous travaillons sur trois bassins versants : - un bassin versant de haute montagne : Le Ribérot (49 km2) - un bassin versant de moyenne montagne : L’Allan de la Savoureuse à la Lizaine (248 km2) - un bassn versant de plaine : L’Yvette de sa source au confluent de la Mérantaise (inclus) (202 km2)</p>
 </div>
 </div>
 </div>
@@ -246,7 +248,10 @@
 <h1><span class="header-section-number">4</span> Méthodologie</h1>
 <div id="création-du-raster-virtuel" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Création du raster virtuel</h2>
-<pre><code>c &lt;- &quot;C:/Users/Downloads/mnt&quot;
+<p>Il est nécessaire de télécharger le modèle numérique de terrain de chaque département depuis le site de l’IGN-F (<a href="https://geoservices.ign.fr/rgealti" class="uri">https://geoservices.ign.fr/rgealti</a>). Une fois l’ensemble des dalles téléchargées il faut créer un raster virtuel à l’aide du code R suivant :</p>
+<pre><code>library(terra)
+library(stars)
+c &lt;- &quot;C:/Users/Downloads/mnt&quot;
 v &lt;- &quot;C:/Users/Downloads/new.vrt&quot; 
 ras_lst &lt;- list.files(c, full.names = T, pattern = &quot;.asc$&quot;, recursive=T)
 terra::vrt(ras_lst, v, overwrite = T)
@@ -255,29 +260,31 @@ st_crs(ras) = &quot;EPSG:2154&quot;</code></pre>
 </div>
 <div id="découpage-du-raster-par-lemprise-dun-bassin-versant" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Découpage du raster par l’emprise d’un bassin versant</h2>
-<p>Clip / Crop</p>
+<p>L’emprise de chaque bassin versant s’obtient à travers la BD Topage®. Une fois chaque emprise sélectionnée et enregistrée il faut découper le raster virtuel par les limites du bassin versant sur lequel nous souhaitons travailler.</p>
 <pre><code>bv &lt;- st_read(&quot;nom_bassin_versant.gpkg&quot;)
-mnt &lt;- st_crop(ras,bv))
+mnt &lt;- st_crop(ras,bv)) # ras : nom du raster virtuel
 write_stars(mnt,&quot;nom_mnt.tif&quot;)</code></pre>
 </div>
-<div id="geomorphon" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> Geomorphon</h2>
-<p>Traitement géomorphons : A partir du MNT, l’algorithme Geomorphon issu de qgisprocess nous permet d’obtenir la carte des géomorphons sur chacun des bassins versants.</p>
-<pre><code>mnt &lt;- raster(&quot;bv_riberot.tif&quot;)
+<div id="le-traitement-geomorphon-détection-des-10-formes-du-paysage" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Le traitement Geomorphon : détection des 10 formes du paysage</h2>
+<p>A partir du MNT de chaque bassin versant, l’algorithme Geomorphon issu de l’algorithme <em>qgisproces</em>s nous permet d’obtenir la carte des géomorphons sur chacun des bassins versants.</p>
+<pre><code>mnt &lt;- raster(&quot;nom_mnt.tif&quot;)
 dem_geomorphons = qgis_run_algorithm(&quot;saga:geomorphons&quot;,
                                      DEM = mnt,
                                      THRESHOLD = 1,
-                                     RADIUS = 5,
+                                     RADIUS = 5, # lookup distance/ rayon de recherche
                                      METHOD = 1,
-                                     GEOMORPHONS = paste(&quot;geomorphon_nom_bv_5m_LD5&quot;, &quot;.tif&quot;))
-                                     
-geomorphon &lt;- raster(&quot;geomorphon_riberot_5m_LD5.tif&quot;)
+                                     GEOMORPHONS = paste0(&quot;geomorphon_nom_bv_5m_LD5&quot;, &quot;.tif&quot;))</code></pre>
+</div>
+<div id="statistiques" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Statistiques</h2>
+<pre><code>geomorphon &lt;- raster(&quot;geomorphon_nom_bv_5m_LD5.tif&quot;)
 report_geomorphons = qgis_run_algorithm(&quot;native:rasterlayeruniquevaluesreport&quot;,
                                     INPUT = geomorphon,
                                     BAND = 1,
-                                    OUTPUT_TABLE = paste(&quot;rapport_geomorphon_riberot_5m_LD5&quot;, &quot;.csv&quot;))
+                                    OUTPUT_TABLE = paste0(&quot;rapport_geomorphon_nom_bv_5m_LD5&quot;, &quot;.csv&quot;))
                                     
-stat &lt;- read.csv(&quot;rapport_geomorphon_riberot_5m_LD5.csv&quot;)
+stat &lt;- read.csv(&quot;rapport_geomorphon_nom_bv_5m_LD5.csv&quot;)
 data.frame(stat)</code></pre>
 </div>
 </div>

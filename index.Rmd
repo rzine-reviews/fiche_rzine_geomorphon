@@ -93,6 +93,7 @@ B et du raster C : Diachronie avec 4 classes présentant la dynamique forestièr
 
 Le paysage est un agencement d’éléments abiotiques, biotiques et anthropiques, permettant le développement d’écosystèmes variés (Reynard, 2005). Il est  possible de cartographier des unités homogènes en classant le terrain en différents éléments du paysages (Evans *et al*., 2009). Etudier les formes du paysage permet alors de mieux comprendre la segmentation paysagère. 
 
+A travers l'algorithme Geomorphon nous cherchons à montrer qu'il est possible d'obtenir rapidement et simplement une description des principaux éléments d'un paysage dans différents contexte de pente. Ainsi nous présentons la démarche qui permet d'extraire les formes du paysage d'un bassin versant montagneux, d'un bassin versant de moyenne montagne et d'un bassin versant de plaine. 
 
 
 ## Données mobilisées
@@ -105,20 +106,24 @@ Nous travaillons sur des MNT à la résolution de 5m (justification?)
 Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'orientation. Il permet également de délimiter le réseau hydrographique, mais aussi différentes indicateurs topographiques : Topographic Wetness Index, Topographic Position Index, etc. 
 
 
-### BD Topage®
+### Les bassins versants issus de la BD Topage® de l'IGN-F
 
 Le découpage des bassins versants provient de la BD Topage® (Bassins versant topographiques - BD Topage - Métropole) qui vise à produire un nouveau référentiel hydrographique français, en remplacement du référentiel BD Carthage®. 
 
 Nous travaillons sur trois bassins versants : 
 - un bassin versant de haute montagne : Le Ribérot (49 km2)
-- un bassin versant de moyenne montagne : L'Allan de la Savoureuse à la Lizaine
-- un bassn versant de plaine : L'Yvette de sa source au confluent de la Mérantaise (inclus)
+- un bassin versant de moyenne montagne : L'Allan de la Savoureuse à la Lizaine (248 km2)
+- un bassn versant de plaine : L'Yvette de sa source au confluent de la Mérantaise (inclus) (202 km2)
 
 # Méthodologie
 
 ## Création du raster virtuel
 
+Il est nécessaire de télécharger le modèle numérique de terrain de chaque département depuis le site de l'IGN-F (https://geoservices.ign.fr/rgealti). Une fois l'ensemble des dalles téléchargées il faut créer un raster virtuel à l'aide du code R suivant :
+
 ```
+library(terra)
+library(stars)
 c <- "C:/Users/Downloads/mnt"
 v <- "C:/Users/Downloads/new.vrt" 
 ras_lst <- list.files(c, full.names = T, pattern = ".asc$", recursive=T)
@@ -130,37 +135,39 @@ st_crs(ras) = "EPSG:2154"
 
 ## Découpage du raster par l'emprise d'un bassin versant
 
-Clip / Crop
+L'emprise de chaque bassin versant s'obtient à travers la BD Topage®. Une fois chaque emprise sélectionnée et enregistrée il faut découper le raster virtuel par les limites du bassin versant sur lequel nous souhaitons travailler.
 
 ```
 bv <- st_read("nom_bassin_versant.gpkg")
-mnt <- st_crop(ras,bv))
+mnt <- st_crop(ras,bv)) # ras : nom du raster virtuel
 write_stars(mnt,"nom_mnt.tif")
 ```
 
 
-## Geomorphon
+## Le traitement Geomorphon : détection des 10 formes du paysage
 
-
-Traitement géomorphons : 
-A partir du MNT, l'algorithme Geomorphon issu de qgisprocess nous permet d'obtenir la carte des géomorphons sur chacun des bassins versants. 
+A partir du MNT de chaque bassin versant, l'algorithme Geomorphon issu de l'algorithme *qgisproces*s nous permet d'obtenir la carte des géomorphons sur chacun des bassins versants. 
 
 ```
-mnt <- raster("bv_riberot.tif")
+mnt <- raster("nom_mnt.tif")
 dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
                                      DEM = mnt,
                                      THRESHOLD = 1,
-                                     RADIUS = 5,
+                                     RADIUS = 5, # lookup distance/ rayon de recherche
                                      METHOD = 1,
-                                     GEOMORPHONS = paste("geomorphon_nom_bv_5m_LD5", ".tif"))
-                                     
-geomorphon <- raster("geomorphon_riberot_5m_LD5.tif")
+                                     GEOMORPHONS = paste0("geomorphon_nom_bv_5m_LD5", ".tif"))
+```
+
+## Statistiques 
+
+```
+geomorphon <- raster("geomorphon_nom_bv_5m_LD5.tif")
 report_geomorphons = qgis_run_algorithm("native:rasterlayeruniquevaluesreport",
                                     INPUT = geomorphon,
                                     BAND = 1,
-                                    OUTPUT_TABLE = paste("rapport_geomorphon_riberot_5m_LD5", ".csv"))
+                                    OUTPUT_TABLE = paste0("rapport_geomorphon_nom_bv_5m_LD5", ".csv"))
                                     
-stat <- read.csv("rapport_geomorphon_riberot_5m_LD5.csv")
+stat <- read.csv("rapport_geomorphon_nom_bv_5m_LD5.csv")
 data.frame(stat)
 ```
 
