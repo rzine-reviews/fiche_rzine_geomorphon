@@ -29,6 +29,7 @@ R Markdown see <http://rmarkdown.rstudio.com>
 # Importance du relief dans la compréhension des processus physiques
 
 Définition d'un BV (Source?)
+Le BV est "un espace géographique alimentant un cours d'eau et drainé par lui. Il a pour axe le cours d'eau principal et pour limite la ligne de partage des eaux le séparant des bassins versants adjacents" (George, 1970)/
 
 Le bassin versant ou bassin hydrographique, 
 Une meilleure connaissance du relief d'un bassin versant permet de mieux comprendre les processus d'écoulement et d'identifier les zones d'accumulation des eaux.
