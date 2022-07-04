@@ -118,20 +118,13 @@ Nous travaillons sur trois bassins versants :
 
 ## Création du raster virtuel
 
-To do : télécharger les données RGE 5m pour l'Yvette et pour le BV de l'Allan.
-
-
 ```
-ras_virt <- list.files(c, full.names = T, pattern = ".asc$")    # sélection de toutes les dalles
-terra::vrt(ras_virt, v, overwrite = T)                          # création du raster virtuel
-ras <- raster(v)
-plot(ras)
-```
-
-```{r, echo=FALSE}
-library(terra)
-r <- rast("data/mont_valier.tif")
-plot(r)
+c <- "C:/Users/Downloads/mnt"
+v <- "C:/Users/Downloads/new.vrt" 
+ras_lst <- list.files(c, full.names = T, pattern = ".asc$", recursive=T)
+terra::vrt(ras_lst, v, overwrite = T)
+ras <- read_stars(v)
+st_crs(ras) = "EPSG:2154"
 ```
 
 
@@ -140,29 +133,26 @@ plot(r)
 Clip / Crop
 
 ```
-bv <- st_read("bv_riberot.shp")
-mnt_bv <- raster::mask(ras, bv, filename = paste0("mnt_bv_riberot", ".tif")
+bv <- st_read("nom_bassin_versant.gpkg")
+mnt <- st_crop(ras,bv))
+write_stars(mnt,"nom_mnt.tif")
 ```
 
-```
-plot(mnt_bv)
-
-```
 
 ## Geomorphon
 
 
 Traitement géomorphons : 
-A partir du MNT, on fait tourner l'algorithme Geomorphon avec qgisprocess
+A partir du MNT, l'algorithme Geomorphon issu de qgisprocess nous permet d'obtenir la carte des géomorphons sur chacun des bassins versants. 
 
 ```
 mnt <- raster("bv_riberot.tif")
-dem_geomorphons = qgis_run_algorithm("saga:geomorphons", # attention, il faut que l'extension soit active dans QGIS
+dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
                                      DEM = mnt,
                                      THRESHOLD = 1,
                                      RADIUS = 5,
                                      METHOD = 1,
-                                     GEOMORPHONS = paste("geomorphon_riberot_5m_LD5", ".tif"))
+                                     GEOMORPHONS = paste("geomorphon_nom_bv_5m_LD5", ".tif"))
                                      
 geomorphon <- raster("geomorphon_riberot_5m_LD5.tif")
 report_geomorphons = qgis_run_algorithm("native:rasterlayeruniquevaluesreport",
@@ -178,20 +168,46 @@ data.frame(stat)
 
 ## Résultats sur le bassin versant du Ribérot (milieu de haute montagne)
 
-<figure class="center">
-  <img src="figures/geomorphons_valier.png" width="700">
-  <figcaption style="font-size:13px;">*Analyse diachronique de la parcelle 693. A : Orthophotographie actuelle (2016) ; B :
-Raster historique : classification pixel forêt / pixel non forêt en 1955 ; C : Raster actuel reclassifié :
-classification pixel forêt / pixel non forêt en 2015 ; D : Nouveau raster résultant de la somme du raster
-B et du raster C : Diachronie avec 4 classes présentant la dynamique forestière*.  
-  </figcaption>
-</figure>
 
-## Résultats sur le bassin versant du Morvan (milieu de moyenne montagne)
+```{r, echo=FALSE}
+library(terra)
+library(colourpicker)
+r <- rast("data/geomorphon_riberot_5m_LD5.tif")
+cuts = c(1,2,3,4,5,6,7,8,9,10,11)
+pal <- colorRampPalette(c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"))
+terra::plot(r, breaks=cuts, col=pal(10), legend = T)
+
+```
 
 
+
+
+
+## Résultats sur le bassin versant vosgien (milieu de moyenne montagne)
+
+
+```{r, echo=FALSE}
+library(terra)
+library(colourpicker)
+r <- rast("data/geomorphon_allan_5m_LD5.tif")
+cuts = c(1,2,3,4,5,6,7,8,9,10,11)
+pal <- colorRampPalette(c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"))
+terra::plot(r, breaks=cuts, col=pal(10), legend = T)
+
+```
 
 ## Résultats sur le bassin versant de l'Yvette (milieu de plaine)
+
+
+```{r, echo=FALSE}
+library(terra)
+library(colourpicker)
+r <- rast("data/geomorphon_yvette_5m_LD5.tif")
+cuts = c(1,2,3,4,5,6,7,8,9,10,11)
+pal <- colorRampPalette(c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"))
+terra::plot(r, breaks=cuts, col=pal(10), legend = T)
+
+```
 
 
 ## Données comparatives sur trois bassins versants représentatifs de trois milieux différentes
