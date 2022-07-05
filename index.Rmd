@@ -1,7 +1,7 @@
 ---
 title: "Geomorphons pour l'analyse des formes du terrain"
-subtitle: "Analyse des conditions topo-géomorphologiques qui influencent la progression altitudinale de la limite supérieure des arbres dans les Pyrénées orientales françaises"
-date: "2022-06-27"
+subtitle: "Analyse des formes du relief par l'algorithme *Geomorphon* : étude de trois milieux différents"
+date: "2022-07-5"
 author: 
  - name: Olivier Theureaux
    affiliation: UMR LADYSS, CNRS
@@ -22,17 +22,17 @@ link_citations: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-ICI Légende de la photo
+Photographie : D. Birre, 2021
 
 R Markdown see <http://rmarkdown.rstudio.com>
 
 # Importance du relief dans la compréhension des processus physiques
 
-Définition d'un BV (Source?)
-Le BV est "un espace géographique alimentant un cours d'eau et drainé par lui. Il a pour axe le cours d'eau principal et pour limite la ligne de partage des eaux le séparant des bassins versants adjacents" (George, 1970)/
+Définition d'un bassin versant
+Le BV est "un espace géographique alimentant un cours d'eau et drainé par lui. Il a pour axe le cours d'eau principal et pour limite la ligne de partage des eaux le séparant des bassins versants adjacents" (George, 1970)
 
-Le bassin versant ou bassin hydrographique, 
-Une meilleure connaissance du relief d'un bassin versant permet de mieux comprendre les processus d'écoulement et d'identifier les zones d'accumulation des eaux.
+
+Une meilleure connaissance du relief d'un bassin versant permet de mieux comprendre les processus d'écoulement, de mieux comprendre la circulation des eaux, d'identifier les zones d'accumulation et les zones de transfert des eaux.
 
 
 # L'analyse du relief par le traitement *Geomorphon*
@@ -41,7 +41,7 @@ Une meilleure connaissance du relief d'un bassin versant permet de mieux compren
 
 L’algorithme ***Geomorphons***, pour *geomorphologic phonotypes*, est une méthode qui identifie les formes du paysage en utilisant un schéma de reconnaissance développé par Jasiewicz et Stepinski (2012). 
 
-L’algorithme des géomorphons permet d’étudier les formes du relief. Les images de très haute résolution sont aujourd’hui en forte croissance et sont disponibles relativement facilement. Nous avons décidé d’utiliser les géomorphons, qui est une méthode relativement récente (2012) comparée aux autres méthodes de classification automatique du relief basées sur la valeur de la pente et de la courbure du terrain (Dikau, 1991 ; Wood, 1996). Ces méthodes sont efficaces pour traiter de petits rasters mais fonctionnent moins bien dans le cadre de rasters à plusieurs millions de pixels : les calculs sont alors trop complexes et demandent trop de ressources pour identifier avec suffisamment de précision l’ensemble des formes du terrain. Un des premiers usages de l’algorithme fut la création de la carte géomorphologique de la Pologne (Jasiewicz and Stepinski, 2013). Il a été aussi utilisé pour décrire le Monténégro (Frankl et al., 2016). Puis l'algorithme a été utilisé pour identifier certaines formes spécifiques du paysage, comme des drumlins (Sarasan et al., 2018) ou des surfaces plates (Veselsky et al., 2015). Bandura (2016) l’a aussi utilisé pour identifier et délimiter des sommets dans les montagnes slovaques. Cette méthode a également été utilisée pour détecter des objets à une échelle plus fine : des formes à la surface d’un glacier (Gawrysiak, 2020), des traces de barrages organisés par des castors (Swift, 2021), ou bien encore la détection de formes fluviales côtières (Gioia, 2021).
+L’algorithme des géomorphons permet d’étudier les formes du relief. Nous avons décidé d’utiliser les géomorphons, qui est une méthode relativement récente (2012) comparée aux autres méthodes de classification automatique du relief basées sur la valeur de la pente et de la courbure du terrain (Dikau, 1991 ; Wood, 1996). Ces méthodes sont efficaces pour traiter de petits rasters mais fonctionnent moins bien dans le cadre de rasters à plusieurs millions de pixels : les calculs sont alors trop complexes et demandent trop de ressources pour identifier avec suffisamment de précision l’ensemble des formes du terrain. Un des premiers usages de l’algorithme fut la création de la carte géomorphologique de la Pologne (Jasiewicz and Stepinski, 2013). Il a été aussi utilisé pour décrire le relief du Monténégro (Frankl *et al*., 2016). Puis l'algorithme a été utilisé pour identifier certaines formes spécifiques du paysage, comme des drumlins (Sarasan *et al*., 2018) ou des surfaces plates (Veselsky *et al*., 2015). Bandura (2016) l’a aussi utilisé pour identifier et délimiter des sommets dans les montagnes slovaques. Cette méthode a également été utilisée pour détecter des objets à une échelle plus fine : des formes à la surface d’un glacier (Gawrysiak, 2020), des traces de barrages organisés par des castors (Swift, 2021), ou bien encore la détection de formes fluviales côtières (Gioia, 2021).
 
 Les géomorphons sont déterminés par une méthode de classification semi-automatique du modèle numérique de terrain (MNT). Cette méthode ne prend pas en compte les valeurs des cellules voisines mais s’inspire du principe de "ligne de mire". La méthode est flexible et s’adapte à différents terrains car le critère de la “ligne de mire” est plus souple que le critère de la “fenêtre fixe” que l’on trouve dans les autres méthodes de classification. Elle adapte la distance à prendre en compte selon la notion de « *terrain openess* ». Il s’agit de calculer le rapport entre ce qui est appelé l’angle au zénith (Φ : *zenith angle*) et l’angle au nadir (Ψ : *nadir angle*) au sein d’un rayon de recherche défini par l’utilisateur (*lookup distance*). Le rayon est égal à x fois la largeur d’un pixel. Par exemple, choisir une *lookup distance* de 10 pour un MNT d’une résolution de 5 mètres cela revient à choisir une *lookup distance* de 50 mètres. Aussi, le paramètre “*threshold angle*” permet de définir le niveau minimum de planéité souhaité permettant de gommer les aspérités microtopographiques. 
 
@@ -94,17 +94,17 @@ B et du raster C : Diachronie avec 4 classes présentant la dynamique forestièr
 
 Le paysage est un agencement d’éléments abiotiques, biotiques et anthropiques, permettant le développement d’écosystèmes variés (Reynard, 2005). Il est  possible de cartographier des unités homogènes en classant le terrain en différents éléments du paysages (Evans *et al*., 2009). Etudier les formes du paysage permet alors de mieux comprendre la segmentation paysagère. 
 
-A travers l'algorithme Geomorphon nous cherchons à montrer qu'il est possible d'obtenir rapidement et simplement une description des principaux éléments d'un paysage dans différents contexte de pente. Ainsi nous présentons la démarche qui permet d'extraire les formes du paysage d'un bassin versant montagneux, d'un bassin versant de moyenne montagne et d'un bassin versant de plaine. 
+A travers l'algorithme Geomorphon nous cherchons à montrer qu'il est possible d'obtenir rapidement et simplement une description des principaux éléments d'un paysage dans différents contexte de pente. Ainsi, nous présentons la démarche qui permet d'extraire les formes du paysage d'un bassin versant montagneux, d'un bassin versant de moyenne montagne et d'un bassin versant de plaine. 
 
 
 ## Données mobilisées
 
 ### RGE MNT 5m
 
-Le calcul des géomorphons se fait à partir d'un modèle numérique de terrain. Aujourd'hui, l'IGN met à notre disposition des MNT de très grande résolution (1m, 5m) sur l'intégralité du territoire français (source).
-Nous travaillons sur des MNT à la résolution de 5m (justification?)
+Le calcul des géomorphons se fait à partir d'un modèle numérique de terrain.  Aujourd'hui, les images de très haute résolution sont aujourd’hui en forte croissance et sont disponibles relativement facilement. L'IGN met à notre disposition des MNT de très grande résolution (1m, 5m) sur l'intégralité du territoire français (source). 
+Nous travaillons sur des MNT à la résolution de 5m (référence article Géomorphon ?)
 
-Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'orientation. Il permet également de délimiter le réseau hydrographique, mais aussi différentes indicateurs topographiques : Topographic Wetness Index, Topographic Position Index, etc. 
+Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'orientation. Il permet également de délimiter le réseau hydrographique, mais aussi d'extraire différentes indicateurs topographiques : Topographic Wetness Index, Topographic Position Index, etc. 
 
 
 ### Les bassins versants issus de la BD Topage® de l'IGN-F
