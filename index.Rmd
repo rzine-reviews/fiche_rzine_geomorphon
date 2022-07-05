@@ -1,6 +1,6 @@
 ---
-title: "Geomorphons pour l'analyse des formes du terrain"
-subtitle: "Analyse des formes du relief par l'algorithme *Geomorphon* : étude de trois milieux différents"
+title: "Caractérisation des formes du relief à l'échelle de bassins-versants"
+subtitle: "Analyse quantitative des formes du relief via l'algorithme *Geomorphon* pour trois bassins-versants montagnards"
 date: "2022-07-5"
 author: 
  - name: Olivier Theureaux
@@ -22,44 +22,35 @@ link_citations: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Photographie : D. Birre, 2021
+Photographie : Pyrénées ariégeoises (cliché D. Birre, 2021)
 
 R Markdown see <http://rmarkdown.rstudio.com>
 
-# Importance du relief dans la compréhension des processus physiques
+# Importance du relief dans la compréhension des processus bio-physiques
 
-Définition d'un bassin versant
-Le BV est "un espace géographique alimentant un cours d'eau et drainé par lui. Il a pour axe le cours d'eau principal et pour limite la ligne de partage des eaux le séparant des bassins versants adjacents" (George, 1970)
+La caractérisation des formes du relief pour une région donnée est une tâche importante pour la compréhension des processus bio-physiques se produisant sur ce territoire. Tout d'abord, les formes du relief actuelles résultent de processus s'étant déroulés dans le passé sur des échelles spatio-temporelles plus ou moins larges. Des territoires marqués par des épisodes glaciaires, des transgressions marines ou des longues périodes d'aridité présenteront des formes bien caractéristiques. Être capable de les lire nous renseigne immédiatement sur leurs histoires. Par exemple, un territoire sur lequel le géomorphologue identifie la présence de drumlins, est un territoire qui a été englacé dans le passé. Ces formes peuvent également nous renseigner sur les dynamiques présentes. Ainsi, un banc de sable ou de galets au milieu d'une rivière nous indique que ce cours d'eau est sujet à des épisodes de hautes eaux présentant une énergie suffisante pour entraîner des sédimentes plus ou moins gros.
+
+Les formes du relief ont aussi un impact fort sur les processus hydrologiques. L'eau, par définition, suit les plus fortes pentes au sein d'une région donnée. Identifier les formes en creux sur un versant ainsi que leurs pentes nous permettent d'identifier les chemins empruntés par les flux d'eau. Ces chemins, en retour, seront plus sujets à l'érosion hydrique que les régions voisines et pourvoiront les flux d'eau en sédiments et nutriments. Au contraire, les zones de replat ou de cuvettes seront des zones d'étalement et des zones pièges à sédiments et nutriments. La présence d'eau sur des terrains pentus pourra également influer sur les mouvements de terrain comme les éboulements ou les coulées de boues.
+
+La géomorphologie aura également un impact sur le climat local. Les zones de pics ou les lignes de crêtes seront plus sujettes aux vents forts que les bas de versants par exemple. De même, les creux de versants ou les dépressions pourront avoir des températures plus basses que les zones alentours du fait d'une moins forte exposition au Soleil ou au poids plus lourd de l'air froid. Cet impact sur le micro-climat aura, à son tour, des répercussions sur la biodiversité. Certaines espèces se développeront mieux dans les zones ensoleillées que les zones en ombre. D'autres, au contraire, profiteront de la position d'abri qu'offrent les creux de versants.
+
+Enfin, la caractérisation des formes du relief d'un territoire donné aura une importance sur l'aménagement et l'occupation humaine. Certaines installations devront éviter de se trouver sur certaines formes ou à proximité d'autres. Au contraire, d'autres installations pourront profiter de certaines caractéristiques liées à la pente ou à la position d'abri.
 
 
-Une meilleure connaissance du relief d'un bassin versant permet de mieux comprendre les processus d'écoulement, de mieux comprendre la circulation des eaux, d'identifier les zones d'accumulation et les zones de transfert des eaux.
+# Techniques de caractérisation du relief
+
+## Techniques historiques
+
+Fenêtres glissanets ... comparée aux autres méthodes de classification automatique du relief basées sur la valeur de la pente et de la courbure du terrain (Dikau, 1991 ; Wood, 1996). Ces méthodes sont efficaces pour traiter de petits rasters mais fonctionnent moins bien dans le cadre de rasters à plusieurs millions de pixels : les calculs sont alors trop complexes et demandent trop de ressources pour identifier avec suffisamment de précision l’ensemble des formes du terrain. 
 
 
-# L'analyse du relief par le traitement *Geomorphon*
-
-## Présentation du traitement *Geomorphon*
+## Techniques par identification de *géomorphons*
 
 L’algorithme ***Geomorphons***, pour *geomorphologic phonotypes*, est une méthode qui identifie les formes du paysage en utilisant un schéma de reconnaissance développé par Jasiewicz et Stepinski (2012). 
 
-L’algorithme des géomorphons permet d’étudier les formes du relief. Nous avons décidé d’utiliser les géomorphons, qui est une méthode relativement récente (2012) comparée aux autres méthodes de classification automatique du relief basées sur la valeur de la pente et de la courbure du terrain (Dikau, 1991 ; Wood, 1996). Ces méthodes sont efficaces pour traiter de petits rasters mais fonctionnent moins bien dans le cadre de rasters à plusieurs millions de pixels : les calculs sont alors trop complexes et demandent trop de ressources pour identifier avec suffisamment de précision l’ensemble des formes du terrain. Un des premiers usages de l’algorithme fut la création de la carte géomorphologique de la Pologne (Jasiewicz and Stepinski, 2013). Il a été aussi utilisé pour décrire le relief du Monténégro (Frankl *et al*., 2016). Puis l'algorithme a été utilisé pour identifier certaines formes spécifiques du paysage, comme des drumlins (Sarasan *et al*., 2018) ou des surfaces plates (Veselsky *et al*., 2015). Bandura (2016) l’a aussi utilisé pour identifier et délimiter des sommets dans les montagnes slovaques. Cette méthode a également été utilisée pour détecter des objets à une échelle plus fine : des formes à la surface d’un glacier (Gawrysiak, 2020), des traces de barrages organisés par des castors (Swift, 2021), ou bien encore la détection de formes fluviales côtières (Gioia, 2021).
+L’algorithme des géomorphons permet d’étudier les formes du relief. Nous avons décidé d’utiliser les géomorphons, qui est une méthode relativement récente (2012). Un des premiers usages de l’algorithme fut la création de la carte géomorphologique de la Pologne (Jasiewicz and Stepinski, 2013). Il a été aussi utilisé pour décrire le relief du Monténégro (Frankl *et al*., 2016). Puis l'algorithme a été utilisé pour identifier certaines formes spécifiques du paysage, comme des drumlins (Sarasan *et al*., 2018) ou des surfaces plates (Veselsky *et al*., 2015). Bandura (2016) l’a aussi utilisé pour identifier et délimiter des sommets dans les montagnes slovaques. Cette méthode a également été utilisée pour détecter des objets à une échelle plus fine : des formes à la surface d’un glacier (Gawrysiak, 2020), des traces de barrages organisés par des castors (Swift, 2021), ou bien encore la détection de formes fluviales côtières (Gioia, 2021).
 
 Les géomorphons sont déterminés par une méthode de classification semi-automatique du modèle numérique de terrain (MNT). Cette méthode ne prend pas en compte les valeurs des cellules voisines mais s’inspire du principe de "ligne de mire". La méthode est flexible et s’adapte à différents terrains car le critère de la “ligne de mire” est plus souple que le critère de la “fenêtre fixe” que l’on trouve dans les autres méthodes de classification. Elle adapte la distance à prendre en compte selon la notion de « *terrain openess* ». Il s’agit de calculer le rapport entre ce qui est appelé l’angle au zénith (Φ : *zenith angle*) et l’angle au nadir (Ψ : *nadir angle*) au sein d’un rayon de recherche défini par l’utilisateur (*lookup distance*). Le rayon est égal à x fois la largeur d’un pixel. Par exemple, choisir une *lookup distance* de 10 pour un MNT d’une résolution de 5 mètres cela revient à choisir une *lookup distance* de 50 mètres. Aussi, le paramètre “*threshold angle*” permet de définir le niveau minimum de planéité souhaité permettant de gommer les aspérités microtopographiques. 
-
-*Geomorphons* est disponible dans l’application SAGA (Système pour les Analyses Géoscientifiques Automatisées) que nous appelons *via* le package *qgisproceess*.
-
-
-```
-dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
-                                       DEM = DEM,
-                                       THRESHOLD = 1, # fixe le seuil de planéité
-                                       RADIUS = 60, # fixe le rayon de recherche
-                                       METHOD = 1, #
-                                       GEOMORPHONS = paste("nom", ".tif"))
-
-```
-
-
-## Les 10 formes du paysage obtenues par le traitement
 
 Geomorphons compare chaque cellule du MNT aux huit valeurs des voisins visibles les plus lointains. Les altitudes équivalentes à la valeur de la cellule centrale sont représentées par un point vert, celles plus basses en bleu et celles plus hautes en rouge.
 
@@ -71,9 +62,6 @@ classification pixel forêt / pixel non forêt en 2015 ; D : Nouveau raster rés
 B et du raster C : Diachronie avec 4 classes présentant la dynamique forestière*.  
   </figcaption>
 </figure>
-
-
-
 
 Selon la configuration des huit valeurs, dix formes peuvent être identifiées.
 
@@ -87,27 +75,31 @@ B et du raster C : Diachronie avec 4 classes présentant la dynamique forestièr
 </figure>
 
 
+# Objectifs
 
-# Objectifs et données mobilisées
+L'objectif de cette analyse est de quantifier les formes de relief grâce à la technique des géomorphons pour trois bassins-versants montagnards. Les trois bassins choisis sont le Ribérot dans les Pyrénées, le XX et le XX.Ces trois bassins sont faiblement anthropisés et présentent des reliefs et des altitudes variées. Pour chacun de ces bassin, la proportion de chaque classe de relief sera calculée. Nous tenterons ainsi de voir si les trois bassins partagent des traits communs et quelles peuvent être les spécificités topographiques de chacun.
 
-## Objectifs 
 
-Le paysage est un agencement d’éléments abiotiques, biotiques et anthropiques, permettant le développement d’écosystèmes variés (Reynard, 2005). Il est  possible de cartographier des unités homogènes en classant le terrain en différents éléments du paysages (Evans *et al*., 2009). Etudier les formes du paysage permet alors de mieux comprendre la segmentation paysagère. 
+# Méthode
 
-A travers l'algorithme Geomorphon nous cherchons à montrer qu'il est possible d'obtenir rapidement et simplement une description des principaux éléments d'un paysage dans différents contexte de pente. Ainsi, nous présentons la démarche qui permet d'extraire les formes du paysage d'un bassin versant montagneux, d'un bassin versant de moyenne montagne et d'un bassin versant de plaine. 
+Geomorphon dans GRASS, SAGA et WBT. Ici, via QGIS process.
+
+*Geomorphons* est disponible dans l’application SAGA (Système pour les Analyses Géoscientifiques Automatisées) que nous appelons *via* le package *qgisproceess*.
+
+```
+dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
+                                       DEM = DEM,
+                                       THRESHOLD = 1, # fixe le seuil de planéité
+                                       RADIUS = 60, # fixe le rayon de recherche
+                                       METHOD = 1, #
+                                       GEOMORPHONS = paste("nom", ".tif"))
+
+```
 
 
 ## Données mobilisées
 
-### RGE MNT 5m
-
-Le calcul des géomorphons se fait à partir d'un modèle numérique de terrain.  Aujourd'hui, les images de très haute résolution sont aujourd’hui en forte croissance et sont disponibles relativement facilement. L'IGN met à notre disposition des MNT de très grande résolution (1m, 5m) sur l'intégralité du territoire français (source). 
-Nous travaillons sur des MNT à la résolution de 5m (référence article Géomorphon ?)
-
-Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'orientation. Il permet également de délimiter le réseau hydrographique, mais aussi d'extraire différentes indicateurs topographiques : Topographic Wetness Index, Topographic Position Index, etc. 
-
-
-### Les bassins versants issus de la BD Topage® de l'IGN-F
+## Les bassins versants issus de la BD Topage® de l'IGN-F
 
 Le découpage des bassins versants provient de la BD Topage® (Bassins versant topographiques - BD Topage - Métropole) qui vise à produire un nouveau référentiel hydrographique français, en remplacement du référentiel BD Carthage®. 
 
@@ -116,9 +108,24 @@ Nous travaillons sur trois bassins versants :
 - un bassin versant de moyenne montagne : L'Allan de la Savoureuse à la Lizaine (248 km2)
 - un bassn versant de plaine : L'Yvette de sa source au confluent de la Mérantaise (inclus) (202 km2)
 
-# Méthodologie
 
-## Création du raster virtuel
+### RGE IGN MNT 5m
+
+Le calcul des géomorphons se fait à partir d'un modèle numérique de terrain.  Aujourd'hui, les images de très haute résolution sont aujourd’hui en forte croissance et sont disponibles relativement facilement. L'IGN met à notre disposition des MNT de très grande résolution (1m, 5m) sur l'intégralité du territoire français (source). 
+Nous travaillons sur des MNT à la résolution de 5m (référence article Géomorphon ?)
+
+Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'orientation. Il permet également de délimiter le réseau hydrographique, mais aussi d'extraire différentes indicateurs topographiques : Topographic Wetness Index, Topographic Position Index, etc. 
+
+
+# Mise en oeuvre
+
+## Préparation des données
+
+### Extraction des bassins de la BD TOPAGE
+
+Avec la librairie sf tout ça tout ça ou depuis le WFS
+
+### Création du raster virtuel de MNT
 
 Il est nécessaire de télécharger le modèle numérique de terrain de chaque département depuis le site de l'IGN-F (https://geoservices.ign.fr/rgealti). Une fois l'ensemble des dalles téléchargées il faut créer un raster virtuel à l'aide du code R suivant :
 
