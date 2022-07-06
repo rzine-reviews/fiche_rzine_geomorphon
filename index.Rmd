@@ -41,7 +41,7 @@ Enfin, la caractérisation des formes du relief d'un territoire donné aura une 
 
 ## Techniques historiques
 
-Fenêtres glissanets ... comparée aux autres méthodes de classification automatique du relief basées sur la valeur de la pente et de la courbure du terrain (Dikau, 1991 ; Wood, 1996). Ces méthodes sont efficaces pour traiter de petits rasters mais fonctionnent moins bien dans le cadre de rasters à plusieurs millions de pixels : les calculs sont alors trop complexes et demandent trop de ressources pour identifier avec suffisamment de précision l’ensemble des formes du terrain. 
+Fenêtres glissanets, test push comparée aux autres méthodes de classification automatique du relief basées sur la valeur de la pente et de la courbure du terrain (Dikau, 1991 ; Wood, 1996). Ces méthodes sont efficaces pour traiter de petits rasters mais fonctionnent moins bien dans le cadre de rasters à plusieurs millions de pixels : les calculs sont alors trop complexes et demandent trop de ressources pour identifier avec suffisamment de précision l’ensemble des formes du terrain. 
 
 
 ## Techniques par identification de *géomorphons*
