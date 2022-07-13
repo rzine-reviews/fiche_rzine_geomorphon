@@ -79,20 +79,20 @@ B et du raster C : Diachronie avec 4 classes présentant la dynamique forestièr
 
 # Objectifs
 
-L'objectif de cette analyse est de quantifier les formes de relief grâce à la technique des géomorphons pour trois bassins-versants montagnards. Les trois bassins choisis sont le Ribérot dans les Pyrénées, le XX et le XX.Ces trois bassins sont faiblement anthropisés et présentent des reliefs et des altitudes variées. Pour chacun de ces bassin, la proportion de chaque classe de relief sera calculée. Nous tenterons ainsi de voir si les trois bassins partagent des traits communs et quelles peuvent être les spécificités topographiques de chacun.
+L'objectif de cette analyse est de quantifier les formes de relief grâce à la technique des géomorphons pour trois bassins-versants montagnards. Les trois bassins choisis sont le Ribérot dans les Pyrénées, la Séveraisse dans les Alpes et la Tarentaine dans le Massif Central.Ces trois bassins sont faiblement anthropisés et présentent des reliefs et des altitudes variées. Pour chacun de ces bassins, la proportion de chaque classe de relief sera calculée. Nous tenterons ainsi de voir si les trois bassins partagent des traits communs et quelles peuvent être les spécificités topographiques de chacun.
 
 
 # Méthode
 
-Geomorphon dans GRASS, SAGA et WBT. Ici, via QGIS process.
+Geomorphon est disponible dans les applications SIG GRASS, SAGA et WhiteboxTools. Ici, nous avons décidé de l'utilisé depuis le package QGIS process qui permet facilement d'utiliser des algorithmes du module de traitements QGIS depuis RStudio.
 
-*Geomorphons* est disponible dans l’application SAGA (Système pour les Analyses Géoscientifiques Automatisées) que nous appelons *via* le package *qgisproceess*.
+Ainsi, *Geomorphons*, disponible dans l’application SAGA (Système pour les Analyses Géoscientifiques Automatisées) est appelé dans R *via* le package *qgisproceess*.
 
 ```
 dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
                                        DEM = DEM,
                                        THRESHOLD = 1, # fixe le seuil de planéité
-                                       RADIUS = 60, # fixe le rayon de recherche
+                                       RADIUS = 100, # fixe le rayon de recherche
                                        METHOD = 1, #
                                        GEOMORPHONS = paste("nom", ".tif"))
 
@@ -106,9 +106,9 @@ dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
 Le découpage des bassins versants provient de la BD Topage® (Bassins versant topographiques - BD Topage - Métropole) qui vise à produire un nouveau référentiel hydrographique français, en remplacement du référentiel BD Carthage®. 
 
 Nous travaillons sur trois bassins versants : 
-- un bassin versant de haute montagne : Le Ribérot (49 km2)
-- un bassin versant de moyenne montagne : L'Allan de la Savoureuse à la Lizaine (248 km2)
-- un bassn versant de plaine : L'Yvette de sa source au confluent de la Mérantaise (inclus) (202 km2)
+- un bassin versant pyrénéen : Le Ribérot (49 km2) est situé en Ariège. Il prend sa source au mont Valier (2838m)
+- un bassin versant alpin : La Séveraisse du torrent de Navette au Drac (107 km2). Elle prend sa source dans les glaciers des Ecrins. 
+- un bassin du Massif Central : La Tarentaine (Trentaine) de sa source au confluent de l'Eau Verte (44 km2). Elle prend sa source à 1785m dans les monts Dore. 
 
 
 ### RGE IGN MNT 5m
@@ -125,7 +125,17 @@ Le MNT permet d'extraire de nombreuses informations : l'altitude, la pente, l'or
 
 ### Extraction des bassins de la BD TOPAGE
 
-Avec la librairie sf tout ça tout ça ou depuis le WFS
+La librairie sf nous permet d'extraire des bassins versants ciblés par une simple requête sur le nom du BV (TopoOH). 
+
+
+
+```
+library(sf)
+bv <- st_read("BassinVersantTopographique.json") # chargement de la couche vecteur des bassins versants
+bv <- bv %>% filter(bv$TopoOH == "Le Ribérot")   # sélection du bassin versant par son nom
+plot(bv)                                         # affichage de l'emprise du bassin versant
+
+```
 
 ### Création du raster virtuel de MNT
 
@@ -153,7 +163,6 @@ mnt <- st_crop(ras,bv)) # ras : nom du raster virtuel
 write_stars(mnt,"nom_mnt.tif")
 ```
 
-
 ## Le traitement Geomorphon : détection des 10 formes du paysage
 
 A partir du MNT de chaque bassin versant, l'algorithme Geomorphon issu de l'algorithme *qgisproces*s nous permet d'obtenir la carte des géomorphons sur chacun des bassins versants. 
@@ -163,7 +172,7 @@ mnt <- raster("nom_mnt.tif")
 dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
                                      DEM = mnt,
                                      THRESHOLD = 1,
-                                     RADIUS = 5, # lookup distance/ rayon de recherche
+                                     RADIUS = 100, # lookup distance/ rayon de recherche
                                      METHOD = 1,
                                      GEOMORPHONS = paste0("geomorphon_nom_bv_5m_LD5", ".tif"))
 ```
@@ -183,48 +192,65 @@ data.frame(stat)
 
 # Résultats
 
-## Résultats sur le bassin versant du Ribérot (milieu de haute montagne)
-
+## Résultats sur le bassin versant du Ribérot (Massif des Pyrénées)
 
 ```{r, echo=FALSE}
-library(terra)
-library(colourpicker)
-r <- rast("data/geomorphon_riberot_5m_LD5.tif")
-cuts = c(1,2,3,4,5,6,7,8,9,10,11)
-pal <- colorRampPalette(c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"))
-terra::plot(r, breaks=cuts, col=pal(10), legend = T)
-
+library(tmap)
+library(raster)
+library(sp)
+r <- raster("data/geomorphon_riberot_5m_LD100.tif")
+crs(r) <- "EPSG:2154"
+tm_shape(r) + 
+  tm_raster(style= "cat",
+            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
+            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
+            title="Géomorphons du Ribérot") + 
+  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
+  tm_scale_bar(breaks = 1) +
+  tm_layout(legend.outside = T)
 ```
 
 
 
 
-
-## Résultats sur le bassin versant vosgien (milieu de moyenne montagne)
-
+## Résultats sur le bassin alpin
 
 ```{r, echo=FALSE}
-library(terra)
-library(colourpicker)
-r <- rast("data/geomorphon_allan_5m_LD5.tif")
-cuts = c(1,2,3,4,5,6,7,8,9,10,11)
-pal <- colorRampPalette(c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"))
-terra::plot(r, breaks=cuts, col=pal(10), legend = T)
-
+library(tmap)
+library(raster)
+library(sp)
+r <- raster("data/geomorphon_severaisse_5m_LD100.tif")
+crs(r) <- "EPSG:2154"
+tm_shape(r) + 
+  tm_raster(style= "cat",
+            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
+            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
+            title="Géomorphons de la Séveraisse") + 
+  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
+  tm_scale_bar(breaks = 1) +
+  tm_layout(legend.outside = T)
 ```
 
-## Résultats sur le bassin versant de l'Yvette (milieu de plaine)
 
+## Résultats sur le bassin versant du Massif Central
 
 ```{r, echo=FALSE}
-library(terra)
-library(colourpicker)
-r <- rast("data/geomorphon_yvette_5m_LD5.tif")
-cuts = c(1,2,3,4,5,6,7,8,9,10,11)
-pal <- colorRampPalette(c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"))
-terra::plot(r, breaks=cuts, col=pal(10), legend = T)
-
+library(tmap)
+library(raster)
+library(sp)
+r <- raster("data/geomorphon_tarentaine_5m_LD100.tif")
+crs(r) <- "EPSG:2154"
+tm_shape(r) + 
+  tm_raster(style= "cat",
+            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
+            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
+            title="Géomorphons de la Tarentaine") + 
+  tm_compass(type = "4star", size = 1, position = c("left", "top")) +
+  tm_scale_bar( breaks = 1) +
+  tm_layout(legend.outside = T)
 ```
+
+
 
 
 ## Données comparatives sur trois bassins versants représentatifs de trois milieux différentes
