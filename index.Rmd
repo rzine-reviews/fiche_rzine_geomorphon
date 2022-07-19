@@ -131,9 +131,13 @@ La librairie sf nous permet d'extraire des bassins versants ciblés par une simp
 
 ```
 library(sf)
-bv <- st_read("BassinVersantTopographique.json") # chargement de la couche vecteur des bassins versants
-bv <- bv %>% filter(bv$TopoOH == "Le Ribérot")   # sélection du bassin versant par son nom
-plot(bv)                                         # affichage de l'emprise du bassin versant
+
+bv <- st_read("BassinVersantTopographique.json")
+riberot <- bv %>% filter(bv$TopoOH == "Le Ribérot")
+riberot_proj <- st_transform(riberot, 2154)
+st_write(riberot_proj, paste0(getwd(), "/", "riberot.shp"))
+riberot_shp <- st_read("riberot.shp")
+plot(riberot_shp)
 
 ```
 
@@ -158,14 +162,16 @@ st_crs(ras) = "EPSG:2154"
 L'emprise de chaque bassin versant s'obtient à travers la BD Topage®. Une fois chaque emprise sélectionnée et enregistrée il faut découper le raster virtuel par les limites du bassin versant sur lequel nous souhaitons travailler.
 
 ```
-bv <- st_read("nom_bassin_versant.gpkg")
-mnt <- st_crop(ras,bv)) # ras : nom du raster virtuel
+bv <- st_read("nom_bassin_versant.shp")
+mnt <- st_crop(ras,bv))                     # ras : nom du raster virtuel
 write_stars(mnt,"nom_mnt.tif")
+mnt <- raster("nom_mnt.tif")
+plot(mnt, main="nom du bassin versant")
 ```
 
 ## Le traitement Geomorphon : détection des 10 formes du paysage
 
-A partir du MNT de chaque bassin versant, l'algorithme Geomorphon issu de l'algorithme *qgisproces*s nous permet d'obtenir la carte des géomorphons sur chacun des bassins versants. 
+A partir du MNT de chaque bassin versant, l'algorithme Geomorphon issu de l'algorithme *qgisprocess* nous permet d'obtenir la carte des géomorphons sur chacun des bassins versants. 
 
 ```
 mnt <- raster("nom_mnt.tif")

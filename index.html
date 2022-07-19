@@ -256,9 +256,13 @@
 <h3><span class="header-section-number">5.1.1</span> Extraction des bassins de la BD TOPAGE</h3>
 <p>La librairie sf nous permet d’extraire des bassins versants ciblés par une simple requête sur le nom du BV (TopoOH).</p>
 <pre><code>library(sf)
-bv &lt;- st_read(&quot;BassinVersantTopographique.json&quot;) # chargement de la couche vecteur des bassins versants
-bv &lt;- bv %&gt;% filter(bv$TopoOH == &quot;Le Ribérot&quot;)   # sélection du bassin versant par son nom
-plot(bv)                                         # affichage de l&#39;emprise du bassin versant
+
+bv &lt;- st_read(&quot;BassinVersantTopographique.json&quot;)
+riberot &lt;- bv %&gt;% filter(bv$TopoOH == &quot;Le Ribérot&quot;)
+riberot_proj &lt;- st_transform(riberot, 2154)
+st_write(riberot_proj, paste0(getwd(), &quot;/&quot;, &quot;riberot.shp&quot;))
+riberot_shp &lt;- st_read(&quot;riberot.shp&quot;)
+plot(riberot_shp)
 </code></pre>
 </div>
 <div id="création-du-raster-virtuel-de-mnt" class="section level3" number="5.1.2">
@@ -277,13 +281,15 @@ st_crs(ras) = &quot;EPSG:2154&quot;</code></pre>
 <div id="découpage-du-raster-par-lemprise-dun-bassin-versant" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Découpage du raster par l’emprise d’un bassin versant</h2>
 <p>L’emprise de chaque bassin versant s’obtient à travers la BD Topage®. Une fois chaque emprise sélectionnée et enregistrée il faut découper le raster virtuel par les limites du bassin versant sur lequel nous souhaitons travailler.</p>
-<pre><code>bv &lt;- st_read(&quot;nom_bassin_versant.gpkg&quot;)
-mnt &lt;- st_crop(ras,bv)) # ras : nom du raster virtuel
-write_stars(mnt,&quot;nom_mnt.tif&quot;)</code></pre>
+<pre><code>bv &lt;- st_read(&quot;nom_bassin_versant.shp&quot;)
+mnt &lt;- st_crop(ras,bv))                     # ras : nom du raster virtuel
+write_stars(mnt,&quot;nom_mnt.tif&quot;)
+mnt &lt;- raster(&quot;nom_mnt.tif&quot;)
+plot(mnt, main=&quot;nom du bassin versant&quot;)</code></pre>
 </div>
 <div id="le-traitement-geomorphon-détection-des-10-formes-du-paysage" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Le traitement Geomorphon : détection des 10 formes du paysage</h2>
-<p>A partir du MNT de chaque bassin versant, l’algorithme Geomorphon issu de l’algorithme <em>qgisproces</em>s nous permet d’obtenir la carte des géomorphons sur chacun des bassins versants.</p>
+<p>A partir du MNT de chaque bassin versant, l’algorithme Geomorphon issu de l’algorithme <em>qgisprocess</em> nous permet d’obtenir la carte des géomorphons sur chacun des bassins versants.</p>
 <pre><code>mnt &lt;- raster(&quot;nom_mnt.tif&quot;)
 dem_geomorphons = qgis_run_algorithm(&quot;saga:geomorphons&quot;,
                                      DEM = mnt,
