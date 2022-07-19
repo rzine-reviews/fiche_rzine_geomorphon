@@ -5,6 +5,8 @@ date: "2022-07-5"
 author: 
  - name: Olivier Theureaux
    affiliation: UMR LADYSS, CNRS
+ - name: Paul Passy
+   affiliation: UMR PRODIG, CNRS
 image: "featured2.png"
 output: 
   rzine::readrzine:
@@ -185,6 +187,9 @@ dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
 
 ## Statistiques 
 
+Nous souhaitons présenter le total pour chaque classe de géomorphons pour chaque bassin versant.
+Pour ce faire nous utilisons la fonction...
+
 ```
 geomorphon <- raster("geomorphon_nom_bv_5m_LD5.tif")
 report_geomorphons = qgis_run_algorithm("native:rasterlayeruniquevaluesreport",
@@ -200,7 +205,8 @@ data.frame(stat)
 
 ## Résultats sur le bassin versant du Ribérot (Massif des Pyrénées)
 
-```{r, echo=FALSE}
+
+```{r, echo=F, message=F, warning=F}
 library(tmap)
 library(raster)
 library(sp)
@@ -221,7 +227,7 @@ tm_shape(r) +
 
 ## Résultats sur le bassin alpin
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=F, warning=F}
 library(tmap)
 library(raster)
 library(sp)
@@ -240,7 +246,7 @@ tm_shape(r) +
 
 ## Résultats sur le bassin versant du Massif Central
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=F, warning=F}
 library(tmap)
 library(raster)
 library(sp)
@@ -261,15 +267,71 @@ tm_shape(r) +
 
 ## Données comparatives sur trois bassins versants représentatifs de trois milieux différentes
 
-Rendu pour les 3 BV : 
+Statistiques pour le Ribérot : 
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r, echo=FALSE, warning=  F, message=F}
+
+library(gtsummary)
+riberot <- read.csv("rapport_geomorphon_riberot_5m_LD100.csv")
+colnames(riberot) <- c("Geomorphon", "Pixel", "Superficie")
+riberot$Geomorphon <- as.factor(riberot$Geomorphon)
+riberot$Nom <- factor(riberot$Geomorphon, 
+                      levels = c("1",  "2",  "3" , "4" , "5"  ,"6" , "7" , "8" , "9"  ,"10"),
+                      labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"))
+
+theme_gtsummary_language("fr", decimal.mark = "," , big.mark = " ")
+tbl_summary(riberot, 
+            label = Pixel ~ "Nombre de pixels",
+            include = c("Pixel"), 
+            by = Nom, 
+            statistic = list(all_continuous() ~ "{sum}")
+)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Statistiques pour la Séveraisse :
+
+
+```{r, echo=FALSE, warning=  F, message=F}
+
+library(gtsummary)
+riberot <- read.csv("rapport_geomorphon_severaisse_5m_LD100.csv")
+colnames(riberot) <- c("Geomorphon", "Pixel", "Superficie")
+riberot$Geomorphon <- as.factor(riberot$Geomorphon)
+riberot$Nom <- factor(riberot$Geomorphon, 
+                      levels = c("1",  "2",  "3" , "4" , "5"  ,"6" , "7" , "8" , "9"  ,"10"),
+                      labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"))
+
+theme_gtsummary_language("fr", decimal.mark = "," , big.mark = " ")
+tbl_summary(riberot, 
+            label = Pixel ~ "Nombre de pixels",
+            include = c("Pixel"), 
+            by = Nom, 
+            statistic = list(all_continuous() ~ "{sum}")
+)
+```
+
+Statistiques pour la Tarentaine :
+
+```{r, echo=FALSE, warning=  F, message=F}
+
+library(gtsummary)
+riberot <- read.csv("rapport_geomorphon_tarentaine_5m_LD100.csv")
+colnames(riberot) <- c("Geomorphon", "Pixel", "Superficie")
+riberot$Geomorphon <- as.factor(riberot$Geomorphon)
+riberot$Nom <- factor(riberot$Geomorphon, 
+                      levels = c("1",  "2",  "3" , "4" , "5"  ,"6" , "7" , "8" , "9"  ,"10"),
+                      labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"))
+
+theme_gtsummary_language("fr", decimal.mark = "," , big.mark = " ")
+tbl_summary(riberot, 
+            label = Pixel ~ "Nombre de pixels",
+            include = c("Pixel"), 
+            by = Nom, 
+            statistic = list(all_continuous() ~ "{sum}")
+)
+```
 
 
 
