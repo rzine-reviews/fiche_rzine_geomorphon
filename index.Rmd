@@ -6,7 +6,9 @@ author:
  - name: Olivier Theureaux
    affiliation: UMR LADYSS, CNRS
  - name: Paul Passy
-   affiliation: UMR PRODIG, CNRS
+   affiliation: UMR PRODIG, CNRS 
+ - name: Thierry Feuillet
+   affiliation: UMR LADYSS, CNRS
 image: "featured2.png"
 output: 
   rzine::readrzine:
@@ -25,8 +27,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Photographie : Pyrénées ariégeoises (cliché D. Birre, 2021)
-
-R Markdown see <http://rmarkdown.rstudio.com>
 
 # Importance du relief dans la compréhension des processus bio-physiques
 
@@ -188,7 +188,8 @@ dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
 ## Statistiques 
 
 Nous souhaitons présenter le total pour chaque classe de géomorphons pour chaque bassin versant.
-Pour ce faire nous utilisons la fonction...
+Pour ce faire nous utilisons la fonction raster layer unique values report disponible par le package *qgisprocess*.
+Cette fonction nous permet d'obtenir le nombre total de pixels pour chaque classe ainsi que la superifice. 
 
 ```
 geomorphon <- raster("geomorphon_nom_bv_5m_LD5.tif")
@@ -265,7 +266,7 @@ tm_shape(r) +
 
 
 
-## Données comparatives sur trois bassins versants représentatifs de trois milieux différentes
+## Données comparatives sur trois bassins versants représentatifs de trois milieux différents
 
 Statistiques pour le Ribérot : 
 
@@ -334,7 +335,9 @@ tbl_summary(riberot,
 ```
 
 
-
+Sur ces terrains de montagne, l'objet pente est l'objet le plus représenté par l'algorithme *Geomorphons*. 
+Il répésente 69% du total de pixels pour le bassin versant du Ribérot, 70% pour la Séveraisse et 62% pour la Tarentaine. 
+Nous tronvons ensuite les objets éperon et creux de versants, chacun représentant pour chaque bassin versant entre 12 et 14% du total. 
 
 # Bibliographie (à revoir)
 
