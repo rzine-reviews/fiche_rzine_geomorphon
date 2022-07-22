@@ -1,0 +1,111 @@
+<VRTDataset rasterXSize="3000" rasterYSize="4000">
+  <SRS dataAxisToSRSAxisMapping="1,2">PROJCS["RGF93 / Lambert-93",GEOGCS["RGF93",DATUM["Reseau_Geodesique_Francais_1993",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6171"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4171"]],PROJECTION["Lambert_Conformal_Conic_2SP"],PARAMETER["latitude_of_origin",46.5],PARAMETER["central_meridian",3],PARAMETER["standard_parallel_1",49],PARAMETER["standard_parallel_2",44],PARAMETER["false_easting",700000],PARAMETER["false_northing",6600000],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","2154"]]</SRS>
+  <GeoTransform>  9.4999750000000000e+05,  5.0000000000000000e+00,  0.0000000000000000e+00,  6.4250025000000000e+06,  0.0000000000000000e+00, -5.0000000000000000e+00</GeoTransform>
+  <VRTRasterBand dataType="Float32" band="1">
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MAXIMUM">3422.1799316406</MDI>
+      <MDI key="STATISTICS_MEAN">2279.7280498136</MDI>
+      <MDI key="STATISTICS_MINIMUM">1041.6700439453</MDI>
+      <MDI key="STATISTICS_STDDEV">494.37919552135</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+    <NoDataValue>-99999</NoDataValue>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0950_6410_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="0" yOff="3000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0950_6415_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="0" yOff="2000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0950_6420_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="0" yOff="1000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0950_6425_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0955_6410_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="1000" yOff="3000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0955_6415_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="1000" yOff="2000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0955_6420_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="1000" yOff="1000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0955_6425_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="1000" yOff="0" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0960_6410_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="2000" yOff="3000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0960_6415_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="2000" yOff="2000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0960_6420_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="2000" yOff="1000" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+    <ComplexSource resampling="nearest">
+      <SourceFilename relativeToVRT="0">/home/poulpe/scripts/fiche_rzine_geomorphon/data/RGE_5m_Dep05//RGEALTI_FXX_0960_6425_MNT_LAMB93_IGN69.asc</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1000" RasterYSize="1000" DataType="Float32" BlockXSize="1000" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1000" ySize="1000" />
+      <DstRect xOff="2000" yOff="0" xSize="1000" ySize="1000" />
+      <NODATA>-99999</NODATA>
+    </ComplexSource>
+  </VRTRasterBand>
+</VRTDataset>
