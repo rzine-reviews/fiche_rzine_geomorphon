@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+/data_processed/*.gpkg-shm
+/data_processed/*.gpkg-wal
