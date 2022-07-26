@@ -102,6 +102,7 @@ Pour vérifier sa bonne installation, il est possible d'afficher la configuratio
 library(qgisprocess)
 qgis_configure()
 ```
+
 Nous en profitons pour charger dès maintenant les différents packages dont nous aurons besoin par la suite.
 
 ```
@@ -111,6 +112,8 @@ library(sf)
 library ("dplyr")
 # chargement de la librairie terra pour la manipulation de raster
 library("terra")
+# chargement de la librairie tmap pour la création de cartes
+library(tmap)
 ```
 
 ## Données mobilisées
@@ -259,6 +262,8 @@ riberot <- vect(riberot)
 dem_riberot <- crop(dem_09, riberot)
 # masque du MNT selon les limites du Ribérot
 dem_riberot <- mask(dem_riberot, riberot)
+# export du MNT (facultatif)
+terra::writeRaster(dem_riberot, "data_processed/dem_Riberot.tif", filetype = "GTiff", overwrite = TRUE)
 
 # chargement du MNT virtuel des Hautes-Alpes
 dem_05 <- rast("data_processed/RGE_5m_Dep05.vrt")
@@ -268,6 +273,8 @@ severaisse <- vect(severaisse)
 dem_severaisse <- crop(dem_05, severaisse)
 # masque du MNT selon les limites de la Severaisse
 dem_severaisse <- mask(dem_severaisse, severaisse)
+# export du MNT (facultatif)
+terra::writeRaster(dem_severaisse, "data_processed/dem_Severaisse.tif", filetype = "GTiff", overwrite = TRUE)
 
 # chargement du MNT virtuel du Puy-de-Dôme
 dem_63 <- rast("data_processed/RGE_5m_Dep63.vrt")
@@ -277,25 +284,114 @@ tarentaine <- vect(tarentaine)
 dem_tarentaine <- crop(dem_63, tarentaine)
 # masque du MNT selon les limites de la Tarentaine
 dem_tarentaine <- mask(dem_tarentaine, tarentaine)
+# export du MNT (facultatif)
+terra::writeRaster(dem_tarentaine, "data_processed/dem_Tarentaine.tif", filetype = "GTiff", overwrite = TRUE)
 ```
 
 Nous disposons maintenant des MNT découpés selon chacun de nos bassins-versants. Nous pouvons passer au traitement des géomorphons.
 
-## Le traitement Geomorphon : détection des 10 formes du paysage
+## Le traitement Geomorphon : détection des 10 formes de reliefs
 
-A partir du MNT de chaque bassin versant, l'algorithme Geomorphon issu de l'algorithme *qgisprocess* nous permet d'obtenir la carte des géomorphons sur chacun des bassins versants. 
+À partir du MNT de chaque bassin-versant, nous pouvons lancer l'analyse des formes de reliefs grâce à l'algorithme *Geomorphon*. Nous utiliserons son implémentation dans SAGA GIS à l'aide de la librairie *qgisprocess*. Nous allons ainsi obtenir le raster des 10 formes de reliefs telles que répertoriées par *Géomorphons* pour chacun de nos bassins.
+
+L'utilisateur doit spécifier une distance de recherche, c'est-à-dire la distance maximale sur laquelle une forme de relief doit être recherchée. Ici, nous pouvons la spécifier à 20 pixels, ce qui équivaut à une distance de recherche de 100 mètres, car un pixel mesure 5 mètres de côté.
 
 ```
-mnt <- raster("nom_mnt.tif")
-dem_geomorphons = qgis_run_algorithm("saga:geomorphons",
-                                     DEM = mnt,
-                                     THRESHOLD = 1,
-                                     RADIUS = 100, # lookup distance/ rayon de recherche
-                                     METHOD = 1,
-                                     GEOMORPHONS = paste0("geomorphon_nom_bv_5m_LD5", ".tif"))
+# Analyse des géomorphons du Ribérot
+# le chemin et le nom du raster de géomorphons en sortie
+geom_riberot <- "data_processed/geomorphons_Riberot.tif"
+qgis_run_algorithm("grass7:r.geomorphon",
+                  elevation = dem_riberot,
+                  search = 20, # lookup distance/rayon de recherche
+                  flat = 1,
+                  forms = geom_riberot)
+
+# Analyse des géomorphons de la Séveraisse
+# le chemin et le nom du raster de géomorphons en sortie
+geom_severaisse <- "data_processed/geomorphons_Severaisse.tif"
+qgis_run_algorithm("grass7:r.geomorphon",
+                  elevation = dem_severaisse,
+                  search = 20, # lookup distance/rayon de recherche
+                  flat = 1,
+                  forms = geom_severaisse)
+
+# Analyse des géomorphons de la Tarentaine
+# le chemin et le nom du raster de géomorphons en sortie
+geom_tarentaine <- "data_processed/geomorphons_Tarentaine.tif"
+qgis_run_algorithm("grass7:r.geomorphon",
+                  elevation = dem_tarentaine,
+                  search = 20, # lookup distance/rayon de recherche
+                  flat = 1,
+                  forms = geom_tarentaine)
 ```
 
-## Statistiques 
+Nous disposons à ce niveau de trois rasters présentant les 10 formes de relief pour chacun de nos bassins-versants. Selon l'algorithme *geomorphons*, ces 10 classes correspondent au tableau suivant.
+
+| Classe de relief | Valeur de pixel | Code couleur par défaut |
+|------------------|-----------------|-------------------------|
+| Plan             | 1               | #dcdcdc                 |
+| Sommet           | 2               | #380000                 |
+| Crête            | 3               | #c80000                 |
+| Haut de versant  | 4               | #ff5014                 |
+| Éperon           | 5               | #fad23c                 |
+| Pente            | 6               | #ffff3c                 |
+| Creux de versant | 7               | #b4e614                 |
+| Bas de versant   | 8               | #3cfa96                 |
+| Vallée           | 9               | #0000ff                 |
+| Dépression       | 10              | #000038                 |
+
+# Résultats
+
+## Représentation cartographique
+
+Nous pouvons représenter la répartition géographique des formes de reliefs de nos trois bassins en les cartographiant. Cela peut se faire via les lignes de commande suivantes.
+
+```{r, echo=F, message=F, warning=F}
+#library(sp)
+# Cartographie du Ribérot
+# nous chargeons le raster des géomorphons du Ribérot
+geom_riberot <- rast("data_processed/geomorphons_Riberot.tif")
+#crs(r) <- "EPSG:2154"
+tm_shape(geom_riberot) + 
+  tm_raster(style= "cat",
+            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
+            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
+            title="Géomorphons du Ribérot") + 
+  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
+  tm_scale_bar(breaks = 1) +
+  tm_layout(legend.outside = T)
+
+# Cartographie de la Séveraisse
+# nous chargeons le raster des géomorphons de la Séveraisse
+geom_severaisse <- rast("data_processed/geomorphons_Severaisse.tif")
+#crs(r) <- "EPSG:2154"
+tm_shape(geom_severaisse) + 
+  tm_raster(style= "cat",
+            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
+            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
+            title="Géomorphons de la Séveraisse") + 
+  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
+  tm_scale_bar(breaks = 1) +
+  tm_layout(legend.outside = T)
+
+# Cartographie de la Tarentaine
+# nous chargeons le raster des géomorphons de la Tarentaine
+geom_tarentaine <- rast("data_processed/geomorphons_Tarentaine.tif")
+#crs(r) <- "EPSG:2154"
+tm_shape(geom_tarentaine) + 
+  tm_raster(style= "cat",
+            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
+            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
+            title="Géomorphons de la Tarentaine") + 
+  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
+  tm_scale_bar(breaks = 1) +
+  tm_layout(legend.outside = T)
+```
+Sur les trois bassins, la forme de relief dominante est clairement la "Pente", ce qui est tout à fait logique au vu du contexte montagnard de ces bassins. Ensuite, les grandes "Vallées" apparaissent clairement et laissent deviner le réseau hydrographique des bassins. Les grandes vallées sont séparées les unes des autres par des "Lignes de crête" et des "Éperons". Entre les lignes de crête et les vallées, outre les pentes, nous retrouvons fréquemment des "Creux de versant". Les autres classes sont, quant à elles, peu représentées.
+
+L'organisation générale du relief telle que sortie par l'algorithme *geomorphons* semble pertinente et décrire plutôt bien la réalité de ces bassins-versants montagnards marqués par des reliefs variés.
+
+## Comparaison quantitative des formes de reliefs 
 
 Nous souhaitons présenter le total pour chaque classe de géomorphons pour chaque bassin versant.
 Pour ce faire nous utilisons la fonction raster layer unique values report disponible par le package *qgisprocess*.
@@ -312,66 +408,10 @@ stat <- read.csv("rapport_geomorphon_nom_bv_5m_LD5.csv")
 data.frame(stat)
 ```
 
-# Résultats
-
-## Résultats sur le bassin versant du Ribérot (Massif des Pyrénées)
-
-
-```{r, echo=F, message=F, warning=F}
-library(tmap)
-library(raster)
-library(sp)
-r <- raster("data/geomorphon_riberot_5m_LD100.tif")
-crs(r) <- "EPSG:2154"
-tm_shape(r) + 
-  tm_raster(style= "cat",
-            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
-            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
-            title="Géomorphons du Ribérot") + 
-  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
-  tm_scale_bar(breaks = 1) +
-  tm_layout(legend.outside = T)
-```
 
 
 
 
-## Résultats sur le bassin alpin
-
-```{r, echo=FALSE, message=F, warning=F}
-library(tmap)
-library(raster)
-library(sp)
-r <- raster("data/geomorphon_severaisse_5m_LD100.tif")
-crs(r) <- "EPSG:2154"
-tm_shape(r) + 
-  tm_raster(style= "cat",
-            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
-            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
-            title="Géomorphons de la Séveraisse") + 
-  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
-  tm_scale_bar(breaks = 1) +
-  tm_layout(legend.outside = T)
-```
-
-
-## Résultats sur le bassin versant du Massif Central
-
-```{r, echo=FALSE, message=F, warning=F}
-library(tmap)
-library(raster)
-library(sp)
-r <- raster("data/geomorphon_tarentaine_5m_LD100.tif")
-crs(r) <- "EPSG:2154"
-tm_shape(r) + 
-  tm_raster(style= "cat",
-            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
-            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
-            title="Géomorphons de la Tarentaine") + 
-  tm_compass(type = "4star", size = 1, position = c("left", "top")) +
-  tm_scale_bar( breaks = 1) +
-  tm_layout(legend.outside = T)
-```
 
 
 
