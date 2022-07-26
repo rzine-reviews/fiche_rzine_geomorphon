@@ -1,15 +1,5 @@
 <PAMDataset>
   <PAMRasterBand band="1">
-    <Histograms>
-      <HistItem>
-        <HistMin>0.55</HistMin>
-        <HistMax>10.45</HistMax>
-        <BucketCount>10</BucketCount>
-        <IncludeOutOfRange>0</IncludeOutOfRange>
-        <Approximate>0</Approximate>
-        <HistCounts>1809|11035|82454|6771|306819|981741|253446|8390|108484|6817</HistCounts>
-      </HistItem>
-    </Histograms>
     <GDALRasterAttributeTable tableType="thematic">
       <FieldDefn index="0">
         <Name>value</Name>
@@ -66,12 +56,5 @@
         <F>ERROR</F>
       </Row>
     </GDALRasterAttributeTable>
-    <Metadata>
-      <MDI key="STATISTICS_MAXIMUM">10</MDI>
-      <MDI key="STATISTICS_MEAN">6.0011528675175</MDI>
-      <MDI key="STATISTICS_MINIMUM">1</MDI>
-      <MDI key="STATISTICS_STDDEV">1.2290228770685</MDI>
-      <MDI key="STATISTICS_VALID_PERCENT">36.01</MDI>
-    </Metadata>
   </PAMRasterBand>
 </PAMDataset>

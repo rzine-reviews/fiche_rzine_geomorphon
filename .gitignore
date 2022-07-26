@@ -4,3 +4,5 @@
 .Ruserdata
 /data_processed/*.gpkg-shm
 /data_processed/*.gpkg-wal
+/data_processed/*.aux.xml
+/data_processed/*.tfw
