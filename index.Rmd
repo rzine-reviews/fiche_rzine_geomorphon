@@ -59,39 +59,39 @@ L'analyse de voisinage utilise la technique des *fenêtres glissantes* (Figure 1
 
 Ces méthodes ont l'avantage d'être relativement simples à mettre en place mais ont l'inconvénient d'être gourmandes en ressources. De plus, elles sont très contraintes par la résolution des MNT d'entrée et par la taille de fenêtre glissante choisie. Ainsi, pour un même terrain, le résultat pourra être très différent selon la résolution du MNT d'entrée et selon le choix de la taille de fenêtre glissante choisie par l'utilisateur. Cette approche présente aussi le désavantage de mettre en évidence les *petits* reliefs, de l'ordre de taille de la fenêtre glissante, au détriment des grandes formes de relief du paysage.
 
-## Techniques par identification de *géomorphons*
+## Techniques par identification de *geomorphons*
 
 L’algorithme ***Geomorphons***, pour *geomorphologic phonotypes*, est une méthode qui identifie les formes du relief en utilisant un schéma de reconnaissance développé par Jasiewicz et Stepinski (2012). Ces formes de relief sont appelés *geomorphons* par les auteurs. L'avantage ce cette méthode est de ne pas être figé sur une valeur donnée de fenêtre glissante mais d'adapter la distance à prendre en compte grâce au concept de *ligne de mire*.
 
 Ici, nous appliquerons cette méthode à, relativement récente (2012), à nos trois bassins-versants. Un des premiers usages de l’algorithme fut la création de la carte géomorphologique de la Pologne (Jasiewicz and Stepinski, 2013). Il a été aussi utilisé pour décrire le relief du Monténégro (Frankl *et al*., 2016). Puis l'algorithme a été utilisé pour identifier certaines formes spécifiques du paysage, comme des drumlins (Sarasan *et al*., 2018) ou des surfaces plates (Veselsky *et al*., 2015). Bandura (2016) l’a aussi utilisé pour identifier et délimiter des sommets dans les montagnes slovaques. Cette méthode a également été utilisée pour détecter des objets à une échelle plus fine : des formes à la surface d’un glacier (Gawrysiak, 2020), des traces de barrages organisés par des castors (Swift, 2021), ou bien encore la détection de formes fluviales côtières (Gioia, 2021).
 
-Les géomorphons sont déterminés par une méthode de classification semi-automatique du modèle numérique de terrain (MNT). Cette méthode ne prend pas en compte les valeurs des pixels voisins mais s’inspire du principe de "ligne de mire". La méthode est flexible et s’adapte à différents terrains car le critère de la “ligne de mire” est plus souple que le critère de la “fenêtre glissante” fiwe que l’on trouve dans les autres méthodes de classification. Elle adapte la distance à prendre en compte selon la notion de *terrain openess*. Il s’agit de calculer le rapport entre ce qui est appelé l’angle au zénith (Φ : *zenith angle*) et l’angle au nadir (Ψ : *nadir angle*) au sein d’un rayon de recherche défini par l’utilisateur (*lookup distance*). Le rayon est égal à **x* fois la largeur d’un pixel. Par exemple, choisir une *lookup distance* de 10 pour un MNT d’une résolution de 5 mètres revient à choisir une *lookup distance* de 50 mètres. De plus, le paramètre *threshold angle* permet de définir le niveau minimum de planéité souhaité permettant de gommer les aspérités microtopographiques. 
+Les *geomorphons* sont déterminés par une méthode de classification semi-automatique du modèle numérique de terrain (MNT). Cette méthode ne prend pas en compte les valeurs des pixels voisins mais s’inspire du principe de "ligne de mire". La méthode est flexible et s’adapte à différents terrains car le critère de la “ligne de mire” est plus souple que le critère de la “fenêtre glissante” fiwe que l’on trouve dans les autres méthodes de classification. Elle adapte la distance à prendre en compte selon la notion de *terrain openess*. Il s’agit de calculer le rapport entre ce qui est appelé l’angle au zénith (Φ : *zenith angle*) et l’angle au nadir (Ψ : *nadir angle*) au sein d’un rayon de recherche défini par l’utilisateur (*lookup distance*). Le rayon est égal à **x* fois la largeur d’un pixel. Par exemple, choisir une *lookup distance* de 10 pour un MNT d’une résolution de 5 mètres revient à choisir une *lookup distance* de 50 mètres. De plus, le paramètre *threshold angle* permet de définir le niveau minimum de planéité souhaité permettant de gommer les aspérités microtopographiques. 
 
 Cette méthode compare chaque pixel du MNT aux huit valeurs des voisins visibles les plus lointains, au maximum jusqu'à la *lookup distance* définie par l'utilisateur. La figure 2 présente les 10 résultats types d'une telle analyse. Les altitudes équivalentes à la valeur de la cellule centrale sont représentées par un point vert, celles plus basses en bleu et celles plus hautes en rouge.
 
 <figure class="center">
   <img src="figures/geomorphon_8valeurs.png" width="600">
-  <figcaption style="font-size:13px;">*Figure 2 : Les 10 géomorphons identifiés par la méthode. Par exemple pour le Pic (Peak), tous les pixels voisins sont plus bas que le pixel central, leurs altitudes relatives sont donc représentées en bleu. Pour la Vallée (Valley), deux pixels sont d'altitudes équivalentes donc représentés en vert et les autres sont plus hauts, donc représentés en rouge (figure reprise de Jasiewicz et Stepinski (2012))*.  
+  <figcaption style="font-size:13px;">*Figure 2 : Les 10 geomorphons identifiés par la méthode. Par exemple pour le Pic (Peak), tous les pixels voisins sont plus bas que le pixel central, leurs altitudes relatives sont donc représentées en bleu. Pour la Vallée (Valley), deux pixels sont d'altitudes équivalentes donc représentés en vert et les autres sont plus hauts, donc représentés en rouge (figure reprise de Jasiewicz et Stepinski (2012))*.  
   </figcaption>
 </figure>
 
-Ces 10 géomorphons types peuvent évidemment s'identifier sur les rasters produits par l'algorithme (Figure 3).
+Ces 10 *geomorphons types* peuvent évidemment s'identifier sur les rasters produits par l'algorithme (Figure 3).
 
 <figure class="center">
   <img src="figures/geomorphon_10formes.png" width="500">
-  <figcaption style="font-size:13px;">*Figure 3 : Exemple d'un raster présentant les 10 géomorphons types tels que calculés par l'algorithme (figure reprise de Jasiewicz et Stepinski (2012))*.  
+  <figcaption style="font-size:13px;">*Figure 3 : Exemple d'un raster présentant les 10 geomorphons types tels que calculés par l'algorithme (figure reprise de Jasiewicz et Stepinski (2012))*.  
   </figcaption>
 </figure>
 
 # Objectifs de cette fiche
 
-L'objectif de cette analyse est de caractériser et quantifier les formes de relief grâce à la technique des géomorphons pour trois bassins-versants montagnards. Les trois bassins choisis sont le [Ribérot](https://fr.wikipedia.org/wiki/Riberot) dans les Pyrénées, la [Séveraisse](https://fr.wikipedia.org/wiki/S%C3%A9veraisse) dans les Alpes et la [Tarentaine](https://fr.wikipedia.org/wiki/Tarentaine) dans le Massif Central. Ces trois bassins sont faiblement anthropisés et présentent des reliefs et des altitudes variées. Pour chacun de ces bassins, la proportion de chaque classe de relief sera calculée. Nous tenterons ainsi de voir si les trois bassins partagent des traits communs et quelles peuvent être les spécificités topographiques de chacun.
+L'objectif de cette analyse est de caractériser et quantifier les formes de relief grâce à la technique des *geomorphons* pour trois bassins-versants montagnards. Les trois bassins choisis sont le [Ribérot](https://fr.wikipedia.org/wiki/Riberot) dans les Pyrénées, la [Séveraisse](https://fr.wikipedia.org/wiki/S%C3%A9veraisse) dans les Alpes et la [Tarentaine](https://fr.wikipedia.org/wiki/Tarentaine) dans le Massif Central. Ces trois bassins sont faiblement anthropisés et présentent des reliefs et des altitudes variées. Pour chacun de ces bassins, la proportion de chaque classe de relief sera calculée. Nous tenterons ainsi de voir si les trois bassins partagent des traits communs et quelles peuvent être les spécificités topographiques de chacun.
 
 # Outil utilisé et données
 
 ## L'algorithme Geomorphon
 
-L'algorithme *Geomorphon* est disponible dans les logiciels [GRASS GIS](https://grass.osgeo.org/grass82/manuals/r.geomorphon.html), [SAGA GIS](https://saga-gis.sourceforge.io/saga_tool_doc/7.3.0/ta_lighting_8.html) et [WhiteboxTools](https://giswqs.github.io/whiteboxR/reference/wbt_geomorphons.html). Ici, nous avons décidé d'utiliser le module proposé par GRASS GIS. Or GRASS GIS étant inrefacé par QGIS, nous allons utiliser la librairie *QGIS process* qui permet d'utiliser facilement des algorithmes de QGIS depuis R. Ainsi, *Geomorphons*, disponible dans l’application GRASS GIS sera appelé dans R *via* la librairie *qgisproceess*.
+L'algorithme *Geomorphon* est disponible dans les logiciels [GRASS GIS](https://grass.osgeo.org/grass82/manuals/r.geomorphon.html), [SAGA GIS](https://saga-gis.sourceforge.io/saga_tool_doc/7.3.0/ta_lighting_8.html) et [WhiteboxTools](https://giswqs.github.io/whiteboxR/reference/wbt_geomorphons.html). Ici, nous avons décidé d'utiliser le module proposé par GRASS GIS. Or GRASS GIS étant interfacé par QGIS, nous allons utiliser la librairie *QGIS process* qui permet d'utiliser facilement des algorithmes de QGIS depuis R. Ainsi, *Geomorphons*, disponible dans l’application GRASS GIS sera appelé dans R *via* la librairie *qgisproceess*.
 
 La première chose à faire est d'installer cette librairie. Elle n'est pas disponible sur les dépôts officiels, il faut donc l'installer depuis son dépôt sur GitHub. Cela se fait simplement avec les quelques lignes suivantes, comme expliqué [ici](https://paleolimbot.github.io/qgisprocess/).
 
@@ -103,8 +103,8 @@ La première chose à faire est d'installer cette librairie. Elle n'est pas disp
 Pour vérifier sa bonne installation, il est possible d'afficher la configuration de l'installation, comme présenté ci-dessous.
 
 ```{r message=F, warning=F, echo=T, results='hide'}
-#library(qgisprocess)
-#qgis_configure()
+# library(qgisprocess)
+# qgis_configure()
 ```
 
 Nous en profitons pour charger dès maintenant les différentes librairies dont nous aurons besoin par la suite.
@@ -112,8 +112,6 @@ Nous en profitons pour charger dès maintenant les différentes librairies dont 
 ```{r message=F, warning=F, echo=T, results='hide'}
 # chargement de la librairie sf pour la manipulation de couches vecteurs
 library(sf)
-# chargement de la librairie dplyr pour utiliser simplement les filtres de dataframe
-library (dplyr)
 # chargement de la librairie terra pour la manipulation de raster
 library(terra)
 # chargement de la librairie tmap pour la création de cartes
@@ -143,7 +141,7 @@ Pour rappel, nous travaillons ici sur trois bassins-versants :
 
 ### Le MNT RGE de l'IGN à 5m
 
-Le calcul des géomorphons se fait à partir d'un modèle numérique de terrain. Aujourd'hui, des MNT de très haute résolution sont couramment produits et sont disponibles relativement facilement. L'IGN met à disposition gratuitement des MNT de très haute résolution (1m, 5m) sur [l'intégralité du territoire français](https://geoservices.ign.fr/rgealti). Nous travaillons ici sur le MNT à la résolution de 5m nommé *RGE ALTI® 5 m*. À l'échelle des bassins étudiés, cette résolution est tout à fait suffisante. Notons que le RGE est concrètement un *modèle numérique d'élévation* donc prenant en compte notamment les bâtiments et les infrastructures. Néanmoins, nos bassins étant peu anthropisés, nous pourrons nous contenter de cette donnée.
+Le calcul des *geomorphons* se fait à partir d'un modèle numérique de terrain. Aujourd'hui, des MNT de très haute résolution sont couramment produits et sont disponibles relativement facilement. L'IGN met à disposition gratuitement des MNT de très haute résolution (1m, 5m) sur [l'intégralité du territoire français](https://geoservices.ign.fr/rgealti). Nous travaillons ici sur le MNT à la résolution de 5m nommé *RGE ALTI® 5 m*. À l'échelle des bassins étudiés, cette résolution est tout à fait suffisante. Notons que le RGE est concrètement un *modèle numérique d'élévation* donc prenant en compte notamment les bâtiments et les infrastructures. Néanmoins, nos bassins étant peu anthropisés, nous pourrons nous contenter de cette donnée.
 
 # Mise en oeuvre
 
@@ -192,6 +190,7 @@ Une fois les limites des bassins-versants individualisées, nous allons construi
 * Tarentaine : Puy-de-Dôme (63)
 
 Pour chaque département, le MNT est découpé en dalles carrées. Une fois l'ensemble des dalles téléchargées, il faut créer un raster virtuel par département, comme présenté dans le code ci-après. C'est ensuite ce raster virtuel que nous découperons selon les limites de nos bassins.
+
 
 ```{r message=F, warning=F, echo=T, results='hide'}
 library(qgisprocess)
@@ -271,7 +270,7 @@ qgis_run_algorithm("gdal:buildvirtualraster",
 Nous avons maintenant les limites de nos trois bassins, récupérées grâce à la BD TOPAGE, ainsi que les MNT de leurs départements d'appartenance. Le but est maintenant d'extraire les MNT de nos bassins et seulement de nos bassins.
 
 ```{r message=F, warning=F, echo=T, results='hide'}
-# si les limites des bassins ne sont plus chargées dans le projet, nous pouvons les recharger en décomentant les lignes suivantes
+# si les limites des bassins ne sont plus chargées dans le projet, nous pouvons les recharger en réactivant (c'est-à-dire en supprimant le #) les lignes suivantes :
 #riberot <- st_read("data_processed/bv_riberot.gpkg")
 #severaisse <- st_read("data_processed/bv_severaisse.gpkg")
 #tarentaine <- st_read("data_processed/bv_tarentaine.gpkg")
@@ -319,17 +318,17 @@ terra::writeRaster(dem_tarentaine,
       overwrite = TRUE)
 ```
 
-Nous disposons maintenant des MNT découpés selon chacun de nos bassins-versants. Nous pouvons passer au traitement des géomorphons.
+Nous disposons maintenant des MNT découpés selon chacun de nos bassins-versants. Nous pouvons passer au traitement des *geomorphons*.
 
 ## Le traitement Geomorphon : détection des 10 formes de reliefs
 
-À partir du MNT de chaque bassin-versant, nous pouvons lancer l'analyse des formes de reliefs grâce à l'algorithme *Geomorphon*. Nous utiliserons son implémentation dans GRASS GIS à l'aide de la librairie *qgisprocess*. Nous allons ainsi obtenir le raster des 10 formes de reliefs telles que répertoriées par *Géomorphons* pour chacun de nos bassins.
+À partir du MNT de chaque bassin-versant, nous pouvons lancer l'analyse des formes de reliefs grâce à l'algorithme *Geomorphon*. Nous utiliserons son implémentation dans GRASS GIS à l'aide de la librairie *qgisprocess*. Nous allons ainsi obtenir le raster des 10 formes de reliefs telles que répertoriées par *Geomorphons* pour chacun de nos bassins.
 
 L'utilisateur doit spécifier une distance de recherche, c'est-à-dire la distance maximale sur laquelle une forme de relief doit être recherchée. Ici, nous pouvons la spécifier à 20 pixels, ce qui équivaut à une distance de recherche de 100 mètres, car un pixel mesure 5 mètres de côté.
 
 ```{r message=F, warning=F, echo=T, results='hide'}
-# Analyse des géomorphons du Ribérot
-# le chemin et le nom du raster de géomorphons en sortie
+# Analyse des geomorphons du Ribérot
+# le chemin et le nom du raster de geomorphons en sortie
 geom_riberot <- "data_processed/geomorphons_Riberot.tif"
 qgis_run_algorithm("grass7:r.geomorphon",
                   elevation = dem_riberot,
@@ -337,8 +336,8 @@ qgis_run_algorithm("grass7:r.geomorphon",
                   flat = 1,
                   forms = geom_riberot)
 
-# Analyse des géomorphons de la Séveraisse
-# le chemin et le nom du raster de géomorphons en sortie
+# Analyse des geomorphons de la Séveraisse
+# le chemin et le nom du raster de geomorphons en sortie
 geom_severaisse <- "data_processed/geomorphons_Severaisse.tif"
 qgis_run_algorithm("grass7:r.geomorphon",
                   elevation = dem_severaisse,
@@ -346,8 +345,8 @@ qgis_run_algorithm("grass7:r.geomorphon",
                   flat = 1,
                   forms = geom_severaisse)
 
-# Analyse des géomorphons de la Tarentaine
-# le chemin et le nom du raster de géomorphons en sortie
+# Analyse des geomorphons de la Tarentaine
+# le chemin et le nom du raster de geomorphons en sortie
 geom_tarentaine <- "data_processed/geomorphons_Tarentaine.tif"
 qgis_run_algorithm("grass7:r.geomorphon",
                   elevation = dem_tarentaine,
@@ -375,50 +374,58 @@ Nous disposons à ce niveau de trois rasters présentant les 10 formes de relief
 
 ## Représentation cartographique
 
-Nous pouvons représenter la répartition géographique des formes de reliefs de nos trois bassins en les cartographiant. Cela peut se faire via les lignes de commande suivantes.
+Nous pouvons représenter la répartition géographique des formes de reliefs de nos trois bassins en les cartographiant. 
+
+Pour ce faire nous commençons par placer les noms et les couleurs des formes du relief disponibles dans *geomorphons* dans un vecteur *noms* pour les noms et *couleurs* pour les couleurs.  
+
+```{r, message=F, warning=F, echo=T, results='hide'}
+noms = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression")
+couleurs = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038")
+```
+
+Cela nous utilisons les lignes de commande suivantes.
 
 ```{r, message=F, warning=F, echo=T, results='hide'}
 library(terra)
 library(tmap)
 # Cartographie du Ribérot
-# nous chargeons le raster des géomorphons du Ribérot
+# nous chargeons le raster des geomorphons du Ribérot
 geom_riberot <- rast("data_processed/geomorphons_Riberot.tif")
 tm_shape(geom_riberot) + 
   tm_raster(style= "cat",
-            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
-            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
-            title="Géomorphons du Ribérot") + 
+            labels = noms,
+            palette = couleurs,
+            title="Geomorphons du Ribérot") + 
   tm_compass(type = "4star", size = 1, position = c("right", "top")) +
   tm_scale_bar(breaks = 1) +
   tm_layout(legend.outside = T)
 
 # Cartographie de la Séveraisse
-# nous chargeons le raster des géomorphons de la Séveraisse
+# nous chargeons le raster des geomorphons de la Séveraisse
 geom_severaisse <- rast("data_processed/geomorphons_Severaisse.tif")
 tm_shape(geom_severaisse) + 
   tm_raster(style= "cat",
-            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
-            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
-            title="Géomorphons de la Séveraisse") + 
+            labels = noms,
+            palette = couleurs,
+            title="Geomorphons de la Séveraisse") + 
   tm_compass(type = "4star", size = 1, position = c("right", "top")) +
   tm_scale_bar(breaks = 1) +
   tm_layout(legend.outside = T)
 
 # Cartographie de la Tarentaine
-# nous chargeons le raster des géomorphons de la Tarentaine
+# nous chargeons le raster des geomorphons de la Tarentaine
 geom_tarentaine <- rast("data_processed/geomorphons_Tarentaine.tif")
 tm_shape(geom_tarentaine) + 
   tm_raster(style= "cat",
-            labels = c("Plan", "Sommet", "Crête", "Haut de versant", "Eperon", "Pente", "Creux de versant", "Bas de versant", "Vallée", "Dépression"),
-            palette = c("#dcdcdc", "#380000", "#c80000", "#ff5014", "#fad23c", "#ffff3c", "#b4e614", "#3cfa96", "#0000ff", "#000038"),
-            title="Géomorphons de la Tarentaine") + 
+            labels = noms,
+            palette = couleurs,
+            title="Geomorphons de la Tarentaine") + 
   tm_compass(type = "4star", size = 1, position = c("right", "top")) +
   tm_scale_bar(breaks = 1) +
   tm_layout(legend.outside = T)
 ```
 Sur les trois bassins, la forme de relief dominante est clairement la "Pente", ce qui est tout à fait logique au vu du contexte montagnard de ces bassins. Ensuite, les grandes "Vallées" apparaissent clairement et laissent deviner le réseau hydrographique des bassins. Les grandes vallées sont séparées les unes des autres par des "Lignes de crête" et des "Éperons". Entre les lignes de crête et les vallées, outre les pentes, nous retrouvons fréquemment des "Creux de versant". Les autres classes sont, quant à elles, peu représentées.
 
-L'organisation générale du relief telle que sortie par l'algorithme *geomorphons* semble pertinente et décrire plutôt bien la réalité de ces bassins-versants montagnards marqués par des reliefs variés.
 
 ## Comparaison quantitative des formes de reliefs
 
@@ -426,7 +433,7 @@ L'idée est maintenant de regarder si ces trois bassins montagnards partagent de
 
 Pour cette comparaison, nous allons calculer la superficie relative occupée par chaque forme de relief dans nos trois bassins. Nous allons utiliser la fonction *freq()* de la librairie *Terra* qui permet de calculer le nombre de pixels de chaque classe d'un raster et de récupérer ce résultat dans un *dataframe*.
 
-Nous commençons par calculer le nombre de pixels de chaque classe pour le raster de géomorphons du Ribérot.
+Nous commençons par calculer le nombre de pixels de chaque classe pour le raster de *geomorphons* du Ribérot.
 
 ```{r message=F, warning=F}
 relief_riberot <- freq(geom_riberot)
@@ -479,7 +486,6 @@ knitr::kable(relief_bassins, format = "html")
 À partir de ce dataframe groupant les proportions de formes de reliefs des trois bassins, nous allons tracer des graphiques en bâtons de ces proportions. Nous utiliserons la librairie *ggplot2*. Cette librairie prend en entrée les dataframes au format *long*. C'est-à-dire des dataframes où les données sont organisées en lignes plutôt qu'en colonnes. Nous commençons donc par transformer le dataframe des formes de reliefs dans ce format grâce à la librairie *reshape2* et à sa fonction *melt*.
 
 ```{r message=F, warning=F}
-library(reshape2)
 relief_bassins_long <- melt(relief_bassins,
                             id.vars = c('relief'))
 knitr::kable(relief_bassins_long, format = "html")
