@@ -15,7 +15,7 @@ Evaluateur.trice :
 **Julie Pierson** et **Damase Mouralis**
 
 
-Pour la consulter, cliquez [**ici**](https://rzine.fr/docs/........./index.html)
+Pour la consulter, cliquez [**ici**](https://rzine-reviews.github.io/fiche_rzine_geomorphon/)
 
 <br/>  
 
