@@ -146,7 +146,7 @@ Le calcul des *geomorphons* se fait à partir d'un modèle numérique de terrain
 
 # Mise en application
 
-Nous commencerons par préparer nos données afin de disposer d'un MNT à 5 m par bassin-versant. Ensuite, nous calculerons les geomoprhons sur chacun de nos trois MNT. Enfin, nous calculerons quelques statistiques descriptives du relief de nos trois bassins.
+Nous commencerons par préparer nos données afin de disposer d'un MNT à 5 m par bassin-versant. Ensuite, nous calculerons les geomorphons sur chacun de nos trois MNT. Enfin, nous calculerons quelques statistiques descriptives du relief de nos trois bassins.
 
 ## Préparation des données
 
@@ -199,7 +199,7 @@ library(qgisprocess)
 # indication du répertoire contenant les dalles de MNT de l'Ariège
 path_dem_09 <- "/data/RGE_5m_Dep09/"
 
-# nous transformons ce chemin en chemin abslou
+# nous transformons ce chemin en chemin absolu
 path_dem_09 <- paste(getwd(),"/data/RGE_5m_Dep09/", sep="")
 
 # le nom et le chemin du raster virtuel qui sera produit
