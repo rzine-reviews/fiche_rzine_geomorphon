@@ -208,6 +208,9 @@ dem_09 <- "data_processed/RGE_5m_Dep09.vrt"
 # nous construisons la liste de toutes les dalles de MNT du département
 ras_lst <- list.files(path_dem_09, full.names = T, pattern = ".asc$", recursive=T)
 
+# conversion vers le type qgis_list_input
+ras_lst <- qgis_list_input(!!! ras_lst)
+
 # nous construisons le raster virtuel de l'Ariège via QGIS process
 qgis_run_algorithm("gdal:buildvirtualraster",
                	INPUT = ras_lst,
