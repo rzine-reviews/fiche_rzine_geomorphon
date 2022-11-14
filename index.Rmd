@@ -126,6 +126,7 @@ library(ggplot2)
 ## Données mobilisées
 
 Dans ce projet, nous avons besoin de deux types de données :
+
 * les limites des bassins-versants
 * les MNT des bassins-versants
 
@@ -134,6 +135,7 @@ Dans ce projet, nous avons besoin de deux types de données :
 Les limites des bassins-versants proviennent de la [BD Topage®](https://www.sandre.eaufrance.fr/actualite/diffusion-de-la-1%C3%A8re-version-de-la-bd-topage%C2%AE-m%C3%A9tropole), référentiel hydrographique français, en remplacement du référentiel BD Carthage®. Parmi cette base de données, nous téléchargeons la couche *Bassins versant topographiques - Métropole 2019 - BD Topage®* au format *GeoPackage*. Cette couche se nomme *BassinVersantTopographique_FXX.gpkg*. Dans cette couche, nous trouvons l'attribut *TopoOH* qui contient le toponyme de chaque bassin. Nous nous baserons sur cet attribut pour extraire les bassins de cette étude.
 
 Pour rappel, nous travaillons ici sur trois bassins-versants : 
+
 * un bassin-versant pyrénéen : le Ribérot (49 km<sup>2</sup>), situé en Ariège. Il prend sa source au mont Valier (2838 m).
 * un bassin-versant alpin : la Séveraisse, du torrent de Navette au Drac (107 km<sup>2</sup>). Elle prend sa source dans les glaciers des Écrins.
 * un bassin-versant du Massif Central : la Tarentaine, de sa source au confluent de l'Eau Verte (44 km2). Elle prend sa source à 1785 m dans les monts Dore.
