@@ -95,7 +95,6 @@ L'algorithme *Geomorphon* est disponible dans les logiciels [GRASS GIS](https://
 La première chose à faire est d'installer cette librairie. Elle n'est pas disponible sur les dépôts officiels, il faut donc l'installer depuis son dépôt sur GitHub. Cela se fait avec le script suivant, comme expliqué [ici](https://paleolimbot.github.io/qgisprocess/).
 
 ```{r message=F, warning=F, echo=T, results='hide'}
-# install.packages("remotes")
 if (!require("remotes")) install.packages("remotes")
 remotes::install_github("paleolimbot/qgisprocess")
 ```
@@ -120,7 +119,7 @@ Six packages R sont requis pour reproduire les analyses présentées dans cette 
 
 Le code ci-dessous vérifie que toutes les librairies requises sont bien installées. Dans le cas contraire, elles sont installées puis chargées dans la session de travail.
 
-```{r message=FALSE, warning=FALSE, echo=FALSE, results=FALSE}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results=FALSE}
 # Noms de packages nécessaires
 my_packages <- c("sf", "terra", "tmap", "tidyverse", "reshape2", "ggplot2")
 
