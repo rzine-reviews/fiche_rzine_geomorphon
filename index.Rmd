@@ -235,6 +235,9 @@ dem_05 <- "data_processed/RGE_5m_Dep05.vrt"
 # construction de la liste de toutes les dalles de MNT du département
 ras_lst <- list.files(path_dem_05, full.names = T, pattern = ".asc$", recursive=T)
 
+# conversion vers le type qgis_list_input
+ras_lst <- qgis_list_input(!!! ras_lst)
+
 # construction du raster virtuel des Hautes-Alpes via QGIS process
 qgis_run_algorithm("gdal:buildvirtualraster",
                	INPUT = ras_lst,
@@ -258,6 +261,9 @@ dem_63 <- "data_processed/RGE_5m_Dep63.vrt"
 
 # construction de la liste de toutes les dalles de MNT du département
 ras_lst <- list.files(path_dem_63, full.names = T, pattern = ".asc$", recursive=T)
+
+# conversion vers le type qgis_list_input
+ras_lst <- qgis_list_input(!!! ras_lst)
 
 # construction du raster virtuel du Puy-de-Dôme via QGIS process
 qgis_run_algorithm("gdal:buildvirtualraster",
