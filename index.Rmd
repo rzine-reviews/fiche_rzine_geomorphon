@@ -96,31 +96,44 @@ La première chose à faire est d'installer cette librairie. Elle n'est pas disp
 
 ```{r message=F, warning=F, echo=T, results='hide'}
 # install.packages("remotes")
-# remotes::install_github("paleolimbot/qgisprocess")
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("paleolimbot/qgisprocess")
 ```
 
 Pour vérifier sa bonne installation, il est possible d'afficher la configuration de l'installation, comme présenté ci-dessous.
 
 ```{r message=F, warning=F, echo=T, results='hide'}
-# library(qgisprocess)
-# qgis_configure()
+library(qgisprocess)
+qgis_configure()
 ```
 
-Nous en profitons pour charger dès maintenant les différentes librairies dont nous aurons besoin par la suite.
+## Autres packages nécessaires
 
-```{r message=F, warning=F, echo=T, results='hide'}
-# chargement de la librairie sf pour la manipulation de couches vecteurs
-library(sf)
-# chargement de la librairie terra pour la manipulation de raster
-library(terra)
-# chargement de la librairie tmap pour la création de cartes
-library(tmap)
-# chargement de la librairie tidyverse pour la manipulation de dataframes
-library(tidyverse)
-# chargement de la librairie reshape2 qui permet de modifier la structure des dataframes
-library(reshape2)
-# chargement de la librairie ggplot2 pour les graphiques
-library(ggplot2)
+Six packages R sont requis pour reproduire les analyses présentées dans cette fiche :
+
+- `sf` pour la manipulation de couches vecteurs
+- `terra` pour la manipulation de rasters
+- `tmap` pour la création de cartes
+- `tidyverse` pour la manipulation de dataframes
+- `reshape2` qui permet de modifier la structure des dataframes
+- `ggplot2` pour les graphiques
+
+Le code ci-dessous vérifie que toutes les librairies requises sont bien installées. Dans le cas contraire, elles sont installées puis chargées dans la session de travail.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE, results=FALSE}
+# Noms de packages nécessaires
+my_packages <- c("sf", "terra", "tmap", "tidyverse", "reshape2", "ggplot2")
+
+# Vérifier si ces packages sont installés
+missing_packages <- my_packages[!(my_packages %in% installed.packages()[,"Package"])]
+
+# Installation des packages manquants depuis le CRAN
+if(length(missing_packages)) install.packages(missing_packages, 
+                                              repos = "http://cran.us.r-project.org")
+
+# Chargement des packages nécessaires
+lapply(my_packages, library, character.only = TRUE)
+invisible(lapply(my_packages, library,  character.only = TRUE))
 ```
 
 ## Données mobilisées
