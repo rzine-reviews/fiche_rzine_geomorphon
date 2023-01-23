@@ -70,7 +70,7 @@ Cette méthode compare chaque pixel du MNT aux huit valeurs des voisins visibles
 
 <figure class="center">
   <img src="figures/geomorphon_10valeurs.png" width="600">
-  <figcaption style="font-size:13px;">*Figure 2 : Les 10 geomorphons identifiés par la méthode. Par exemple pour le Pic (Peak), tous les pixels voisins sont plus bas que le pixel central, leurs altitudes relatives sont donc représentées en bleu. Pour la Vallée (Valley), deux pixels sont d'altitudes équivalentes donc représentés en vert et les autres sont plus hauts, donc représentés en rouge (figure reprise de Jasiewicz et Stepinski (2012)).*  
+  <figcaption style="font-size:13px;">*Figure 2 : Les 10 geomorphons identifiés par la méthode. Par exemple pour le Pic (Peak), tous les pixels voisins sont plus bas que le pixel central, leurs altitudes relatives sont donc représentées en bleu. Pour le fond de vallée (Valley), deux pixels sont d'altitudes équivalentes donc représentés en vert et les autres sont plus hauts, donc représentés en rouge (figure reprise de Jasiewicz et Stepinski (2012)).*  
   </figcaption>
 </figure>  
 
@@ -227,7 +227,7 @@ ras_lst <- qgis_list_input(!!! ras_lst)
 
 # nous construisons le raster virtuel de l'Ariège via QGIS process
 qgis_run_algorithm("gdal:buildvirtualraster",
-               	INPUT = ras_lst,
+               	INPUT=ras_lst,
                	SEPARATE=FALSE,
                	ASSIGN_CRS='EPSG:2154',
                	OUTPUT=dem_09)
@@ -254,7 +254,7 @@ ras_lst <- qgis_list_input(!!! ras_lst)
 
 # construction du raster virtuel des Hautes-Alpes via QGIS process
 qgis_run_algorithm("gdal:buildvirtualraster",
-               	INPUT = ras_lst,
+               	INPUT=ras_lst,
                	SEPARATE=FALSE,
                	ASSIGN_CRS='EPSG:2154',
                	OUTPUT=dem_05)
@@ -281,7 +281,7 @@ ras_lst <- qgis_list_input(!!! ras_lst)
 
 # construction du raster virtuel du Puy-de-Dôme via QGIS process
 qgis_run_algorithm("gdal:buildvirtualraster",
-               	INPUT = ras_lst,
+               	INPUT=ras_lst,
                	SEPARATE=FALSE,
                	ASSIGN_CRS='EPSG:2154',
                	OUTPUT=dem_63)
@@ -310,8 +310,8 @@ dem_riberot <- mask(dem_riberot, riberot)
 # export du MNT (facultatif)
 terra::writeRaster(dem_riberot,
       "data_processed/dem_Riberot.tif",
-      filetype = "GTiff", 
-      overwrite = TRUE)
+      filetype="GTiff", 
+      overwrite=TRUE)
 
 # chargement du MNT virtuel des Hautes-Alpes
 dem_05 <- rast("data_processed/RGE_5m_Dep05.vrt")
@@ -324,8 +324,8 @@ dem_severaisse <- mask(dem_severaisse, severaisse)
 # export du MNT (facultatif)
 terra::writeRaster(dem_severaisse,
       "data_processed/dem_Severaisse.tif",
-      filetype = "GTiff",
-      overwrite = TRUE)
+      filetype="GTiff",
+      overwrite=TRUE)
 
 # chargement du MNT virtuel du Puy-de-Dôme
 dem_63 <- rast("data_processed/RGE_5m_Dep63.vrt")
@@ -338,8 +338,8 @@ dem_tarentaine <- mask(dem_tarentaine, tarentaine)
 # export du MNT (facultatif)
 terra::writeRaster(dem_tarentaine,
       "data_processed/dem_Tarentaine.tif",
-      filetype = "GTiff",
-      overwrite = TRUE)
+      filetype="GTiff",
+      overwrite=TRUE)
 ```
 
 Nous disposons maintenant des MNT découpés selon chacun de nos bassins-versants. Nous pouvons passer au traitement des *geomorphons*.
@@ -391,7 +391,7 @@ Nous disposons à ce niveau de trois rasters présentant les 10 formes de relief
 | Pente            | 6               | #ffff3c                 |
 | Creux de versant | 7               | #b4e614                 |
 | Bas de versant   | 8               | #3cfa96                 |
-| Vallée           | 9               | #0000ff                 |
+| Fond de vallée           | 9               | #0000ff                 |
 | Dépression       | 10              | #000038                 |
 
 # Résultats
@@ -401,7 +401,7 @@ Nous disposons à ce niveau de trois rasters présentant les 10 formes de relief
 Nous pouvons représenter la répartition géographique des formes de reliefs de nos trois bassins en les cartographiant. Pour ce faire nous commençons par placer les noms et les couleurs des formes du relief disponibles dans *geomorphons* dans un vecteur *noms* pour les noms et *couleurs* pour les couleurs.
 
 ```{r, message=F, warning=F, echo=T, results='hide'}
-noms = c("", "flat (plan)", "peak/summit (sommet)", "ridge (crête)", "shoulder (haut de versant", "spur (eperon)", "slope (pente)", "pit/hollow (creux de versant)", "footslope (bas de versant)", "valley (fond de vallée)", "depression (dépression)")
+noms = c("", "flat (plan)", "peak/summit (sommet)", "ridge (crête)", "shoulder (haut de versant", "spur (eperon)", "slope (pente)", "hollow (creux de versant)", "footslope (bas de versant)", "valley (fond de vallée)", "pit/depression (dépression)")
 couleurs = c("#ffffffff",
              "#dcdcdc", 
              "#380000", 
@@ -457,7 +457,7 @@ tm_shape(geom_tarentaine) +
   tm_scale_bar(breaks=1) +
   tm_layout(legend.outside=T)
 ```
-Sur les trois bassins, la forme de relief dominante est clairement la "Pente", ce qui est tout à fait logique au vu du contexte montagnard de ces bassins. Ensuite, les grandes "Vallées" apparaissent clairement et laissent deviner le réseau hydrographique des bassins. Les grandes vallées sont séparées les unes des autres par des "Lignes de crête" et des "Éperons". Entre les lignes de crête et les vallées, outre les pentes, nous retrouvons fréquemment des "Creux de versant". Les autres classes sont, quant à elles, peu représentées.
+Sur les trois bassins, la forme de relief dominante est clairement la "Pente", ce qui est tout à fait logique au vu du contexte montagnard de ces bassins. Ensuite, les grandes "Vallées" apparaissent clairement et laissent deviner le réseau hydrographique des bassins. Les grandes vallées sont séparées les unes des autres par des "Lignes de crête" et des "Éperons". Entre les lignes de crête et les fonds de vallées, outre les pentes, nous retrouvons fréquemment des "Creux de versant". Les autres classes sont, quant à elles, peu représentées.
 
 
 ## Comparaison quantitative des formes de reliefs
@@ -536,7 +536,7 @@ ggplot(relief_bassins_long, aes(fill=variable, y=value, x=relief)) +
   theme(legend.position = c(.11, .85))
 ```
 
-Au vu de ce graphique, les trois bassins sont largement similaires en termes de répartition de formes de reliefs. Cependant, en y regardant de plus près, le bassin de moyenne montagne, à savoir celui de la Tarentaine dans le Massif Central, présente une proportion de pentes (*slope*) moins importante que les bassins pyrénéen et alpin, respectivement représentés par le Ribérot et la Séveraisse. Le bassin de la Tarentaine présente 55 % de pentes contre un peu plus de 65 % pour les deux autres bassins. En contre partie, le bassin de la Tarentaine présente un peu plus d'éperons (*spur*) que les deux autres bassins. La proportion d'éperons est de 17.4 % pour la Tarentaine contre à peu près 14 % pour le Ribérot et la Séveraisse. Il en est de même pour les vallées (*valley*), où la proportion atteint 6 % pour la Tarentaine et seulement 1.5 à 2 % pour les deux autres bassins. Ces résultats sont tout à fait logiques au regard du contexte des trois bassins. En moyenne montagne, les pentes sont moins abruptes et les vallées plus larges, ce qui se reflète bien dans cette classification.
+Au vu de ce graphique, les trois bassins sont largement similaires en termes de répartition de formes de reliefs. Cependant, en y regardant de plus près, le bassin de moyenne montagne, à savoir celui de la Tarentaine dans le Massif Central, présente une proportion de pentes (*slope*) moins importante que les bassins pyrénéen et alpin, respectivement représentés par le Ribérot et la Séveraisse. Le bassin de la Tarentaine présente 55 % de pentes contre un peu plus de 65 % pour les deux autres bassins. En contre partie, le bassin de la Tarentaine présente un peu plus d'éperons (*spur*) que les deux autres bassins. La proportion d'éperons est de 17.4 % pour la Tarentaine contre à peu près 14 % pour le Ribérot et la Séveraisse. Il en est de même pour les fonds de vallées (*valley*), où la proportion atteint 6 % pour la Tarentaine et seulement 1.5 à 2 % pour les deux autres bassins. Ces résultats sont tout à fait logiques au regard du contexte des trois bassins. En moyenne montagne, les pentes sont moins abruptes et les fonds de vallées plus larges, ce qui se reflète bien dans cette classification.
 
 # Récapitulatif de la méthode proposée
 
