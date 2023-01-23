@@ -10,7 +10,7 @@ author:
  - name: Thierry Feuillet
    affiliation: UMR IDEES, Université Caen-Normandie
  - name: Déborah Birre
-   affiliation: UMR LADYSS, CNRS
+   affiliation: EA PLEIADE
 image: "treeline.png"
 output: 
   rzine::readrzine:
