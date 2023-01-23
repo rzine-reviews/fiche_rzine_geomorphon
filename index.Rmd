@@ -38,7 +38,7 @@ Les formes du relief ont aussi un impact fort sur les processus hydrologiques. L
 
 La géomorphologie a également un impact sur le climat local. Les zones sommitales ou les lignes de crêtes sont plus sujettes aux vents forts que les bas de versants par exemple. De même, les creux de versants ou les dépressions pourront connaître des températures plus basses que les zones alentours du fait d'une moins forte exposition aux rayons solaires ou de la subsidence de l'air froid. Cet impact sur le micro-climat aura, à son tour, des répercussions sur la biogéographie et la répartition des espèces. Certaines d'entre elles se développeront mieux dans les zones ensoleillées que les zones en ombre. D'autres, au contraire, profiteront de la position d'abri qu'offrent les creux de versants. La caractérisation des formes du relief d'un territoire donné intervient également dans les logiques de localisation de certains aménagements, telles que les éoliennes ou les infrastructures de transport.
 
-Dans cette fiche nous présentons une analyse morphométrique de trois bassins-versants de montagne réalisée à partir d'outils géomatiques et de *modèles numériques de terrain* (MNT) à haute résolution. Le bassin-versant, défini comme l'espace géographique alimentant un cours d'eau et drainé par lui, est un niveau d'analyse pertinent car les actions bio-physiques qui s'y déroulent dépendent fortement de la géomorphologie. L'analyse morphométrique, à savoir l'analyse quantitative des formes du relief et des processus qui les ont produits, est réalisée ici à travers le langage R et différentes librairies d'analyse spatiale. Ce développement permet (i) de représenter la répartition géographique des formes du reliefs au sein de chacun des trois bassins (ii) de procéder à des comparaisons morphométriques, (iii) de présenter des distinctions entre des bassins-versants de moyenne montagne et de haute montagne.
+Dans cette fiche nous présentons une analyse morphométrique de trois bassins-versants de montagne réalisée à partir d'outils géomatiques et de *modèles numériques de terrain* (MNT) à haute résolution. Le bassin-versant, défini comme l'espace géographique alimentant un cours d'eau et drainé par lui, est un niveau d'analyse pertinent car les actions bio-physiques qui s'y déroulent dépendent fortement de la géomorphologie. L'analyse morphométrique, à savoir l'analyse quantitative des formes du relief et des processus qui les ont produits, est réalisée ici à travers le langage R et différentes librairies d'analyse spatiale. Ce développement permet (i) de représenter la répartition géographique des formes du reliefs au sein de chacun des trois bassins, (ii) de procéder à des comparaisons morphométriques, (iii) de présenter des distinctions entre des bassins-versants de moyenne montagne et de haute montagne.
 
 # Techniques de caractérisation du relief basées sur les MNT
 
@@ -424,38 +424,38 @@ library(tmap)
 # Chargement du raster des geomorphons du Ribérot
 geom_riberot <- rast("data_processed/geomorphons_Riberot.tif")
 tm_shape(geom_riberot) + 
-  tm_raster(style= "cat",
-            labels = noms,
-            palette = couleurs,
+  tm_raster(style="cat",
+            labels=noms,
+            palette=couleurs,
             title="Geomorphons du Ribérot") + 
-  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
-  tm_scale_bar(breaks = 1) +
-  tm_layout(legend.outside = T)
+  tm_compass(type="4star", size=1, position=c("right", "top")) +
+  tm_scale_bar(breaks=1) +
+  tm_layout(legend.outside=T)
 
 # Cartographie de la Séveraisse
 # Chargement du raster des geomorphons de la Séveraisse
 geom_severaisse <- rast("data_processed/geomorphons_Severaisse.tif")
 tm_shape(geom_severaisse) + 
-  tm_raster(style= "cat",
-            labels = noms,
-            palette = couleurs,
+  tm_raster(style="cat",
+            labels=noms,
+            palette=couleurs,
             title="Geomorphons de la Séveraisse") + 
-  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
-  tm_scale_bar(breaks = 1) +
-  tm_layout(legend.outside = T)
+  tm_compass(type="4star", size=1, position=c("right", "top")) +
+  tm_scale_bar(breaks=1) +
+  tm_layout(legend.outside=T)
 
 # Cartographie de la Tarentaine
 # Chargement du raster des geomorphons de la Tarentaine  
 
 geom_tarentaine <- rast("data_processed/geomorphons_Tarentaine.tif")
 tm_shape(geom_tarentaine) + 
-  tm_raster(style= "cat",
-            labels = noms,
-            palette = couleurs,
+  tm_raster(style="cat",
+            labels=noms,
+            palette=couleurs,
             title="Geomorphons de la Tarentaine") + 
-  tm_compass(type = "4star", size = 1, position = c("right", "top")) +
-  tm_scale_bar(breaks = 1) +
-  tm_layout(legend.outside = T)
+  tm_compass(type="4star", size=1, position=c("right", "top")) +
+  tm_scale_bar(breaks=1) +
+  tm_layout(legend.outside=T)
 ```
 Sur les trois bassins, la forme de relief dominante est clairement la "Pente", ce qui est tout à fait logique au vu du contexte montagnard de ces bassins. Ensuite, les grandes "Vallées" apparaissent clairement et laissent deviner le réseau hydrographique des bassins. Les grandes vallées sont séparées les unes des autres par des "Lignes de crête" et des "Éperons". Entre les lignes de crête et les vallées, outre les pentes, nous retrouvons fréquemment des "Creux de versant". Les autres classes sont, quant à elles, peu représentées.
 
