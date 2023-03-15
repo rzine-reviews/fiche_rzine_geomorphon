@@ -1,7 +1,8 @@
 ---
 title: "Caractérisation des formes du relief à l'échelle de bassins-versants"
 subtitle: "Analyse quantitative des formes du relief *via* l'algorithme *Geomorphons* pour trois bassins-versants montagnards"
-date: "2022-09-30"
+# date: "2022-09-30"
+date: "`r Sys.Date()`"
 author: 
  - name: Olivier Theureaux
    affiliation: UMR LADYSS, CNRS
@@ -12,6 +13,7 @@ author:
  - name: Déborah Birre
    affiliation: EA PLEIADE
 image: "treeline.png"
+logo: "figures/rzine.png" 
 output: 
   rzine::readrzine:
     highlight: kate
@@ -21,7 +23,10 @@ bibliography: biblio.bib
 nocite : |
   @*
 link_citations: true
-
+github: "rzine-reviews/Rzine_correlation/fiche_rzine_geomorphon"
+# gitlab: "gitlab.huma-num.fr/author/repository"
+doi: ""
+licence: "by-sa"
 ---
 
 ```{r setup, include=FALSE}
@@ -74,6 +79,8 @@ Cette méthode compare chaque pixel du MNT aux huit valeurs des voisins visibles
   </figcaption>
 </figure>  
 
+</br>
+
 Ces 10 *geomorphons types* sont identifiables sur les rasters produits par l'algorithme (Figure 3).
 
 <figure class="center">
@@ -96,14 +103,14 @@ Nous avons décidé d'employer le module proposé par GRASS GIS. Pour ce faire, 
 
 La première chose à faire est d'installer cette librairie. Elle n'est pas disponible sur les dépôts officiels, il faut donc le faire depuis son dépôt sur GitHub. Pour ce faire, il faut suivre la démarche proposée  [ici](https://paleolimbot.github.io/qgisprocess/).
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, eval=TRUE, warning=FALSE, echo=TRUE, results='hide'}
 if (!require("remotes")) install.packages("remotes")
  remotes::install_github("paleolimbot/qgisprocess")
 ```
 
 Pour vérifier sa bonne installation, il est possible d'afficher la configuration de l'installation, comme présenté ci-dessous.
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 library(qgisprocess)
 qgis_configure()
 ```
@@ -168,7 +175,7 @@ Nous commençons par préparer nos données afin de disposer d'un MNT à 5 m par
 
 Nous commençons par charger la couche des bassins-versants à l'échelle de la France métropolitaine issue de la [BD TOPAGE®](https://www.sandre.eaufrance.fr/atlas/srv/fre/catalog.search#/metadata/8885e6fc-9c87-49e7-bd2f-d91f6632e44c). Nous la chargeons sous la forme d'un objet *sf*.
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Chargement de la couche des bassins de toute la France
 bv <- st_read("data/BassinVersantTopographique_FXX.gpkg")
 ```
@@ -181,7 +188,7 @@ Cette couche contient un attribut *TopoOH* qui identifie le nom des bassins-vers
 
 Par une sélection attributaire, nous individualisons nos trois bassins. Pour ce faire, nous utilisons la fonction *filter* de la librairie *dplyr*.
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Extraction du bassin du Ribérot selon son nom
 riberot <- bv %>% filter(bv$TopoOH == "Le Ribérot")
 # Export du bassin du Ribérot en une couche autonome (facultatif)
@@ -207,7 +214,7 @@ Une fois les limites physiques des bassins-versants individualisées, nous const
 Pour chaque département, le MNT est découpé en dalles carrées. Une fois l'ensemble des dalles téléchargées, il faut créer un raster virtuel par département, comme présenté dans le code ci-après. Ce raster virtuel est découpé selon les limites des bassins.
 
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 library(qgisprocess)
 # Pour le département de l'Ariège (09)
 
@@ -221,7 +228,7 @@ path_dem_09 <- paste(getwd(),"/data/RGE_5m_Dep09/", sep="")
 dem_09 <- "data_processed/RGE_5m_Dep09.vrt"
 
 # Nous construisons la liste de toutes les dalles de MNT du département
-ras_lst <- list.files(path_dem_09, full.names = T, pattern = ".asc$", recursive=T)
+ras_lst <- list.files(path_dem_09, full.names =TRUE, pattern = ".asc$", recursive=TRUE)
 
 # Conversion vers le type qgis_list_input
 ras_lst <- qgis_list_input(!!! ras_lst)
@@ -236,7 +243,7 @@ qgis_run_algorithm("gdal:buildvirtualraster",
 
 Nous procédons de même pour le département des Hautes-Alpes.
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Pour le département des Hautes-Alpes (05)
 
 # Indication du répertoire contenant les dalles de MNT des Hautes-Alpes
@@ -249,7 +256,7 @@ path_dem_05 <- paste(getwd(),"/data/RGE_5m_Dep05/", sep="")
 dem_05 <- "data_processed/RGE_5m_Dep05.vrt"
 
 # Construction de la liste de toutes les dalles de MNT du département
-ras_lst <- list.files(path_dem_05, full.names = T, pattern = ".asc$", recursive=T)
+ras_lst <- list.files(path_dem_05, full.names = TRUE, pattern = ".asc$", recursive=TRUE)
 
 # Conversion vers le type qgis_list_input
 ras_lst <- qgis_list_input(!!! ras_lst)
@@ -264,7 +271,7 @@ qgis_run_algorithm("gdal:buildvirtualraster",
 
 Enfin, nous procédons pareillement pour le département du Puy-de-Dôme.
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Pour le département du Puy-de-Dôme (63)
 
 # Indication du répertoire contenant les dalles de MNT du Puy-de-Dôme
@@ -277,7 +284,7 @@ path_dem_63 <- paste(getwd(),"/data/RGE_5m_Dep63/", sep="")
 dem_63 <- "data_processed/RGE_5m_Dep63.vrt"
 
 # Construction de la liste de toutes les dalles de MNT du département
-ras_lst <- list.files(path_dem_63, full.names = T, pattern = ".asc$", recursive=T)
+ras_lst <- list.files(path_dem_63, full.names = TRUE, pattern = ".asc$", recursive=TRUE)
 
 # Conversion vers le type qgis_list_input
 ras_lst <- qgis_list_input(!!! ras_lst)
@@ -296,7 +303,7 @@ qgis_run_algorithm("gdal:buildvirtualraster",
 
 Nous avons maintenant les limites de nos trois bassins, récupérées grâce à la BD TOPAGE, ainsi que les MNT de leurs départements d'appartenance. Le but est maintenant d'extraire les MNT de nos bassins et seulement de nos bassins.
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Si les limites des bassins ne sont plus chargées dans le projet, nous pouvons les recharger
 # en réactivant les trois lignes suivantes (c'est-à-dire en supprimant le #) :
 #riberot <- st_read("data_processed/bv_riberot.gpkg")
@@ -354,7 +361,7 @@ Nous disposons maintenant des MNT découpés selon chacun de nos bassins-versant
 
 L'utilisateur doit spécifier une distance de recherche, c'est-à-dire la distance maximale sur laquelle une forme de relief doit être recherchée. Ici, nous pouvons la spécifier à 20 pixels, ce qui équivaut à une distance de recherche de 100 mètres, car un pixel mesure 5 mètres de côté.
 
-```{r message=F, warning=F, echo=T, results='hide'}
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Analyse des geomorphons du Ribérot
 # Définition du chemin et du nom du raster de geomorphons en sortie
 geom_riberot <- "data_processed/geomorphons_Riberot.tif"
@@ -404,7 +411,7 @@ Nous disposons à ce niveau de trois rasters présentant les 10 formes de relief
 
 Nous pouvons représenter la répartition géographique des formes de relief de nos trois bassins en les cartographiant. Pour ce faire nous commençons par placer les noms et les couleurs des formes du relief disponibles dans *geomorphons* dans un vecteur *noms* pour les noms et *couleurs* pour les couleurs.
 
-```{r, message=F, warning=F, echo=T, results='hide'}
+```{r, message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 noms = c("", "flat (plan)", "peak/summit (sommet)", "ridge (crête)", "shoulder (haut de versant", 
          "spur (eperon)", "slope (pente)", "hollow (creux de versant)", "footslope (bas de versant)", 
          "valley (fond de vallée)", "pit/depression (dépression)")
@@ -423,7 +430,7 @@ couleurs = c("#ffffffff",
 
 Puis nous utilisons les lignes de commande suivantes :
 
-```{r, message=F, warning=F, echo=T, results='hide'}
+```{r, message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 library(terra)
 library(tmap)
 # Cartographie du Ribérot
@@ -436,7 +443,7 @@ tm_shape(geom_riberot) +
             title="Geomorphons du Ribérot") + 
   tm_compass(type="4star", size=1, position=c("right", "top")) +
   tm_scale_bar(breaks=1) +
-  tm_layout(legend.outside=T)
+  tm_layout(legend.outside=TRUE)
 
 # Cartographie de la Séveraisse
 # Chargement du raster des geomorphons de la Séveraisse
@@ -448,7 +455,7 @@ tm_shape(geom_severaisse) +
             title="Geomorphons de la Séveraisse") + 
   tm_compass(type="4star", size=1, position=c("right", "top")) +
   tm_scale_bar(breaks=1) +
-  tm_layout(legend.outside=T)
+  tm_layout(legend.outside=TRUE)
 
 # Cartographie de la Tarentaine
 # Chargement du raster des geomorphons de la Tarentaine
@@ -460,7 +467,7 @@ tm_shape(geom_tarentaine) +
             title="Geomorphons de la Tarentaine") + 
   tm_compass(type="4star", size=1, position=c("right", "top")) +
   tm_scale_bar(breaks=1) +
-  tm_layout(legend.outside=T)
+  tm_layout(legend.outside=TRUE)
 ```
 
 Sur les trois bassins, la forme de relief dominante est clairement la "Pente", ce qui est tout à fait logique au vu du contexte montagnard de ces bassins. Ensuite, les grandes "Vallées" apparaissent clairement et laissent deviner le réseau hydrographique des bassins. Les grandes vallées sont séparées les unes des autres par des "Lignes de crête" et des "Éperons". Entre les lignes de crête et les fonds de vallées, outre les pentes, nous retrouvons fréquemment des "Creux de versant". Les autres classes sont, quant à elles, peu représentées.
@@ -474,14 +481,14 @@ Pour cette comparaison, nous calculons la superficie relative occupée par chaqu
 
 Nous commençons par calculer le nombre de pixels de chaque classe pour le raster de *geomorphons* du Ribérot.
 
-```{r message=F, warning=F}
+```{r message=FALSE, warning=FALSE}
 relief_riberot <- freq(geom_riberot)
 knitr::kable(relief_riberot, format = "html")
 ```
 
 Nous obtenons bien un dataframe à trois colonnes. La première colonne (*layer*) est utile seulement si nous travaillons sur un raster multibande, ce qui n'est pas le cas ici. La deuxième colonne (*value*) contient le nom des classes et la troisième (*count*) le nombre de pixels de chaque classe. Nous allons créer une nouvelle colonne nommée simplement *Ribérot* dans laquelle nous allons calculer la proportion de chaque classe, ce qui nous permettra de faire des comparaisons entre les bassins.
 
-```{r message=F, warning=F}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 relief_riberot$Ribérot <- relief_riberot$count / sum(relief_riberot$count)
 
@@ -492,7 +499,7 @@ knitr::kable(relief_riberot, format = "html")
 
 Nous procédons de même pour les deux autres bassins-versants.
 
-```{r message=F, warning=F}
+```{r message=FALSE, warning=FALSE}
 # Pour la Séveraisse
 relief_severaisse <- freq(geom_severaisse)
 
@@ -510,7 +517,7 @@ knitr::kable(relief_tarentaine, format = "html")
 
 Nous assemblons maintenant ces trois *dataframes* en un seul *via* une jointure attributaire sur le champ *value*. Nous pouvons ainsi comparer les proportions de chaque classe de relief dans nos bassins.
 
-```{r message=F, warning=F}
+```{r message=FALSE, warning=FALSE}
 # Création d'une liste contenant les trois dataframes
 relief_bassins <- list(relief_riberot, relief_severaisse, relief_tarentaine)
 # Grâce à la fonction "reduce" de la librairie tidyverse
@@ -524,7 +531,7 @@ knitr::kable(relief_bassins, format = "html")
 
 À partir de ce *dataframe* groupant les proportions de formes de reliefs des trois bassins, nous traçons des graphiques en bâtons de ces proportions. Nous utilisons la librairie *ggplot2*. Cette librairie prend en entrée les *dataframes* au format *long*, c'est-à-dire des *dataframes* où les données sont organisées en lignes plutôt qu'en colonnes. Nous commençons par transformer le *dataframe* des formes de relief dans ce format grâce à la librairie *reshape2* et à sa fonction *melt*.
 
-```{r message=F, warning=F}
+```{r message=FALSE, warning=FALSE}
 relief_bassins_long <- melt(relief_bassins,
                             id.vars = c('relief'))
 knitr::kable(relief_bassins_long, format = "html")
@@ -532,7 +539,7 @@ knitr::kable(relief_bassins_long, format = "html")
 
 Nous pouvons maintenant tracer le graphique.
 
-```{r message=F, warning=F}
+```{r message=FALSE, warning=FALSE}
 ggplot(relief_bassins_long, aes(fill=variable, y=value, x=relief)) + 
   geom_bar(position='dodge', stat='identity') +
   theme_minimal() + 
