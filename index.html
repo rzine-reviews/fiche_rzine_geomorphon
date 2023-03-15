@@ -1684,8 +1684,8 @@ d’utiliser facilement des algorithmes de QGIS depuis R. Ainsi,
 pas disponible sur les dépôts officiels, il faut donc le faire depuis
 son dépôt sur GitHub. Pour ce faire, il faut suivre la démarche proposée
 <a href="https://paleolimbot.github.io/qgisprocess/">ici</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#if (!require(&quot;remotes&quot;)) install.packages(&quot;remotes&quot;)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;paleolimbot/qgisprocess&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;remotes&quot;</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;paleolimbot/qgisprocess&quot;</span>)</span></code></pre></div>
 <p>Pour vérifier sa bonne installation, il est possible d’afficher la
 configuration de l’installation, comme présenté ci-dessous.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qgisprocess)</span>
