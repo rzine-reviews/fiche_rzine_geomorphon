@@ -96,9 +96,9 @@ Nous avons décidé d'employer le module proposé par GRASS GIS. Pour ce faire, 
 
 La première chose à faire est d'installer cette librairie. Elle n'est pas disponible sur les dépôts officiels, il faut donc le faire depuis son dépôt sur GitHub. Pour ce faire, il faut suivre la démarche proposée  [ici](https://paleolimbot.github.io/qgisprocess/).
 
-```{r message=F, warning=F, echo=T, results='hide'}
-if (!require("remotes")) install.packages("remotes")
-remotes::install_github("paleolimbot/qgisprocess")
+```{r message=F, eval = F, warning=F, echo=T, results='hide'}
+#if (!require("remotes")) install.packages("remotes")
+# remotes::install_github("paleolimbot/qgisprocess")
 ```
 
 Pour vérifier sa bonne installation, il est possible d'afficher la configuration de l'installation, comme présenté ci-dessous.
