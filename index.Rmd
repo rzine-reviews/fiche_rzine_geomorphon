@@ -35,6 +35,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Photographie : Pyrénées ariégeoises (cliché D. Birre, 2021)
 
+<ul style="background-color: #dcdcdc ; border-color:navajowhite3; padding: 0.8em; font-size:115% ; color: CCCCCC">
+**Prérequis** : La reproduction de cette fiche suppose d'avoir les logiciels QGIS et Grass installés sur votre ordianateur. 
+</ul>
+
+<p style="background-color: #dcdcdc ; border-color:navajowhite3; padding: 1em; font-size:115% ; color: CCCCCC">
+Cette fiche présente une analyse quantitative des formes du relief réalisée à l'aide de l'algorithme *r.geomorphon*, disponible via le logiciel Grass. Cet algorithme est accessible dans R grâce au package `qgisprocess`, package qui n'est pas encore disponible sur le CRAN, mais cela semble être à l'étude par ces auteurs (cf [issue 46](https://github.com/r-spatial/qgisprocess/issues/46){target="_blank"}). </p>
+
+
 # Importance du relief dans la compréhension des processus bio-physiques
 
 La caractérisation des formes du relief pour une région donnée est une tâche importante pour la compréhension des processus bio-physiques agissant sur ce territoire. Tout d'abord, les formes actuelles du relief résultent de processus s'étant déroulés dans le passé sur des échelles spatio-temporelles plus ou moins larges. Des territoires marqués par des épisodes glaciaires, des transgressions marines ou de longues périodes d'aridité présenteront des formes bien caractéristiques. Les lire nous renseigne immédiatement sur leurs histoires. Par exemple, un territoire sur lequel le géomorphologue identifie la présence de *drumlins* est un territoire qui a été englacé dans un passé plus ou moins lointain. Ces formes peuvent également nous renseigner sur les dynamiques actuelles. Ainsi, un banc de sable ou de galets au milieu d'une rivière nous indique que ce cours d'eau est sujet à des épisodes de hautes eaux présentant une énergie suffisante pour entraîner des sédiments plus ou moins gros.
@@ -113,6 +121,10 @@ Pour vérifier sa bonne installation, il est possible d'afficher la configuratio
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 library(qgisprocess)
 qgis_configure()
+
+# Pour pouvoir utiliser l'algorithme r.geomorphon il est important d'activer le plugin grassprovider qui nous permettra de l'appeler dans R. Pour ce faire utiliser la fonction :
+qgis_enable_plugins()
+
 ```
 
 ## Autres packages nécessaires
@@ -176,8 +188,9 @@ Nous commençons par préparer nos données afin de disposer d'un MNT à 5 m par
 Nous commençons par charger la couche des bassins-versants à l'échelle de la France métropolitaine issue de la [BD TOPAGE®](https://www.sandre.eaufrance.fr/atlas/srv/fre/catalog.search#/metadata/8885e6fc-9c87-49e7-bd2f-d91f6632e44c). Nous la chargeons sous la forme d'un objet *sf*.
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
-# Chargement de la couche des bassins de toute la France
+# Chargement de la couche des bassins de toute la France que nous avons téléchargé au format gpkg
 bv <- st_read("data/BassinVersantTopographique_FXX.gpkg")
+
 ```
 
 Cette couche contient un attribut *TopoOH* qui identifie le nom des bassins-versants. Dans cette couche, les trois bassins sont identifiés avec les noms suivants :
@@ -205,7 +218,9 @@ st_write(tarentaine, "data_processed/bv_tarentaine.gpkg", delete_layer = TRUE)
 
 ### Création du raster virtuel de MNT
 
-Une fois les limites physiques des bassins-versants individualisées, nous construisons les MNT correspondants. Pour chaque bassin-versant, il est nécessaire de télécharger le MNT de chaque département depuis le site des [Géoservices de l'IGN-F](https://geoservices.ign.fr/rgealti). Nos trois bassins se trouvent respectivement dans les départements suivants :
+Une fois les limites physiques des bassins-versants individualisées, nous construisons les MNT correspondants. Pour chaque bassin-versant, il est nécessaire de télécharger le MNT de chaque département depuis le site des [Géoservices de l'IGN-F](https://geoservices.ign.fr/rgealti). Pour nos MNT nous partirons sur un pas de 5 mètres. Attention le téléchargement peut être long.
+
+Nos trois bassins se trouvent respectivement dans les départements suivants :
 
 * Ribérot : Ariège (09)
 * Séveraisse : Hautes-Alpes (05)
@@ -213,9 +228,13 @@ Une fois les limites physiques des bassins-versants individualisées, nous const
 
 Pour chaque département, le MNT est découpé en dalles carrées. Une fois l'ensemble des dalles téléchargées, il faut créer un raster virtuel par département, comme présenté dans le code ci-après. Ce raster virtuel est découpé selon les limites des bassins.
 
+Les fichiers pour chaque département sont stockés dans le dépôt github suivant: https://github.com/oliviertheureaux/fiche_rzine_geomorphon/tree/main/data
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 library(qgisprocess)
+
+# 
+
 # Pour le département de l'Ariège (09)
 
 # Indication du répertoire contenant les dalles de MNT de l'Ariège
@@ -554,5 +573,12 @@ Au vu de ce graphique, les trois bassins sont largement similaires en termes de 
 # Récapitulatif de la méthode proposée
 
 Nous avons mis au point une chaîne de traitement permettant de classifier et de comparer les formes de relief pour différents bassins-versants. La méthode présentée ici part de l'extraction de bassins choisis par l'utilisateur à partir de la couche hydrographique nationale de référence que représente la BD TOPAGE®. Cette chaîne de traitements l'IGN. Ensuite, pour chaque bassin, à partir de son MNT, est calculé le raster des formes de relief grâce à l'algorithme *geomorphons* implémenté dans GRASS GIS, interfacé par QGIS et appelé *via* la librairie *qgisprocess* de R. Pour finir, les résultats ont été représentés sous forme de cartes et de graphiques en bâtons groupés.
+
+## Info session  {-}
+
+```{r session_info, echo=FALSE}
+kableExtra::kable_styling(knitr::kable(rzine::sessionRzine()[[1]], row.names = F))
+kableExtra::kable_styling(knitr::kable(rzine::sessionRzine()[[2]], row.names = F))
+```
 
 # Bibliographie
