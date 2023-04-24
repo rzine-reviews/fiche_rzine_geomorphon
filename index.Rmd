@@ -36,7 +36,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Photographie : Pyrénées ariégeoises (cliché D. Birre, 2021)
 
 <ul style="background-color: #dcdcdc ; border-color:navajowhite3; padding: 0.8em; font-size:115% ; color: CCCCCC">
-**Prérequis** : La reproduction de cette fiche suppose d'avoir les logiciels QGIS et Grass installés sur votre ordianateur. 
+**Prérequis** : La reproduction de cette fiche suppose d'avoir les logiciels QGIS et Grass installés sur votre ordinateur. 
 </ul>
 
 <p style="background-color: #dcdcdc ; border-color:navajowhite3; padding: 1em; font-size:115% ; color: CCCCCC">
@@ -163,6 +163,14 @@ Dans ce projet, nous avons besoin de deux types de données :
 * les limites des bassins-versants
 * les MNT des bassins-versants
 
+<br/>
+
+<p class="center">[<span style="font-size: 230%;" class="glyphicon glyphicon-download-alt"></span> <br/> Télécharger les données]()</p>
+
+<br/>
+
+Pour rejouer l'analyse, décompressez les données contenues dans l'archive [data.zip]()
+
 ### Les bassins-versants issus de la BD Topage® de l'IGN-F
 
 Les limites des bassins-versants proviennent de la [base de données (BD) Topage®](https://www.sandre.eaufrance.fr/actualite/diffusion-de-la-1%C3%A8re-version-de-la-bd-topage%C2%AE-m%C3%A9tropole), référentiel hydrographique français, en remplacement du référentiel BD Carthage®. Au sein de cette base de données, nous téléchargeons la couche *Bassins-versant topographiques - Métropole 2019 - BD Topage®* au format *GeoPackage*. Cette couche se nomme *BassinVersantTopographique_FXX.gpkg*. Nous y trouvons l'attribut *TopoOH* qui contient le toponyme de chaque bassin. Nous nous basons sur cet attribut pour extraire les bassins de cette étude.
@@ -228,7 +236,6 @@ Nos trois bassins se trouvent respectivement dans les départements suivants :
 
 Pour chaque département, le MNT est découpé en dalles carrées. Une fois l'ensemble des dalles téléchargées, il faut créer un raster virtuel par département, comme présenté dans le code ci-après. Ce raster virtuel est découpé selon les limites des bassins.
 
-Les fichiers pour chaque département sont stockés dans le dépôt github suivant: https://github.com/oliviertheureaux/fiche_rzine_geomorphon/tree/main/data
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 library(qgisprocess)
