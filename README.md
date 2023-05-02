@@ -4,7 +4,7 @@
 Olivier Theureaux (UMR LADYSS, CNRS)   
 Paul Passy (UMR PRODIG, Géotéca, Université Paris-Cité)   
 Thierry Feuillet (UMR IDEES, Université Caen-Normandie)   
-Déborah Birre (UMR LADYSS, CNRS)    
+Déborah Birre (EA PLEIADE, Université Sorbonne Paris Nord)    
 
 **Evaluateur·trices :**   
 Julie Pierson (UMR LETG, CNRS)   
@@ -17,5 +17,5 @@ Cette fiche présente une méthode de caractérisation des formes du relief à l
 
 Pour la consulter, cliquez [**ici**](https://rzine-reviews.github.io/fiche_rzine_geomorphon/)
 
-[![DOI:à venir](https://zenodo.org/badge/DOI/10.48645/xxxx-xxxx.svg)](https://doi.org/10.48645/xxxx-xxxx)
+[![DOI:](https://zenodo.org/badge/DOI/10.48645/xxxx-xxxx.svg)](https://doi.org/10.48645/xxxx-xxxx)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](http://creativecommons.org/licenses/by-sa/4.0/)

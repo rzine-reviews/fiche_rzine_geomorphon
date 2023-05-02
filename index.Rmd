@@ -7,11 +7,11 @@ author:
  - name: Olivier Theureaux
    affiliation: UMR LADYSS, CNRS
  - name: Paul Passy
-   affiliation: UMR PRODIG, Géotéca, Université Paris-Cité 
+   affiliation: UMR PRODIG - Géotéca, Université Paris-Cité 
  - name: Thierry Feuillet
    affiliation: UMR IDEES, Université Caen-Normandie
  - name: Déborah Birre
-   affiliation: EA PLEIADE
+   affiliation: EA PLEIADE, Université Sorbonne Paris Nord
 image: "treeline.png"
 logo: "figures/rzine.png" 
 output: 
@@ -23,7 +23,7 @@ bibliography: biblio.bib
 nocite : |
   @*
 link_citations: true
-github: "rzine-reviews/Rzine_correlation/fiche_rzine_geomorphon"
+github: "rzine-reviews/fiche_rzine_geomorphon"
 # gitlab: "gitlab.huma-num.fr/author/repository"
 doi: ""
 licence: "by-sa"
@@ -36,11 +36,11 @@ knitr::opts_chunk$set(echo = TRUE)
 Photographie : Pyrénées ariégeoises (cliché D. Birre, 2021)
 
 <ul style="background-color: #dcdcdc ; border-color:navajowhite3; padding: 0.8em; font-size:115% ; color: CCCCCC">
-**Prérequis** : La reproduction de cette fiche suppose d'avoir les logiciels QGIS et Grass installés sur votre ordinateur. 
+**Prérequis** : La reproduction du code présenté dans cette fiche nécessite l'installation des logiciels QGIS et GRASS sur votre machine. 
 </ul>
 
 <p style="background-color: #dcdcdc ; border-color:navajowhite3; padding: 1em; font-size:115% ; color: CCCCCC">
-Cette fiche présente une analyse quantitative des formes du relief réalisée à l'aide de l'algorithme *r.geomorphon*, disponible via le logiciel Grass. Cet algorithme est accessible dans R grâce au package `qgisprocess`, package qui n'est pas encore disponible sur le CRAN, mais cela semble être à l'étude par ces auteurs (cf [issue 46](https://github.com/r-spatial/qgisprocess/issues/46){target="_blank"}). </p>
+Cette fiche présente une analyse quantitative des formes du relief réalisée à l'aide de l'algorithme *r.geomorphon*, disponible via le logiciel GRASS. Cet algorithme est accessible dans R grâce au package `qgisprocess`, dont la mise à disposition sur le CRAN semble être à l'étude (cf [issue 46](https://github.com/r-spatial/qgisprocess/issues/46){target="_blank"}). </p>
 
 
 # Importance du relief dans la compréhension des processus bio-physiques
@@ -68,6 +68,8 @@ L'analyse de voisinage utilise la technique des *fenêtres glissantes* (Figure 1
   <figcaption style="font-size:13px;">*Figure 1 : Analyse de voisinage avec une fenêtre glissante de 3×3 pixels (à gauche) et avec une fenêtre glissante de 5×5 pixels (à droite)*.
   </figcaption>
 </figure>
+
+</br>
 
 Ces méthodes ont l'avantage d'être relativement simples à mettre en place, mais ont l'inconvénient d'être gourmandes en ressources. De plus, elles sont très contraintes par la résolution des MNT d'entrée et par la taille  choisie des *fenêtres glissantes*. Ainsi, pour un même terrain, le résultat pourra être très différent selon la résolution du MNT d'entrée et selon le choix de la taille de *fenêtre glissante* sélectionnée par l'utilisateur. Cette approche présente aussi le désavantage de mettre en évidence les *petits* reliefs, de l'ordre de taille de la *fenêtre glissante*, au détriment des grandes formes de relief du paysage.
 
@@ -99,21 +101,21 @@ Ces 10 *geomorphons types* sont identifiables sur les rasters produits par l'alg
 
 # Objectifs de cette fiche
 
-L'objectif de cette analyse est de caractériser et de quantifier les formes de relief grâce à la technique des *geomorphons* pour trois bassins-versants montagnards. Les trois bassins choisis sont le [Ribérot](https://fr.wikipedia.org/wiki/Riberot) dans les Pyrénées, la [Séveraisse](https://fr.wikipedia.org/wiki/S%C3%A9veraisse) dans les Alpes et la [Tarentaine](https://fr.wikipedia.org/wiki/Tarentaine) dans le Massif Central. Ces trois bassins sont faiblement anthropisés et présentent des formes de reliefs et des altitudes variées. Pour chacun de ces bassins, la proportion de chaque classe de relief sera calculée. Nous tenterons ainsi de voir si les trois bassins partagent des traits communs et les possibles spécificités topographiques de chacun.
+L'objectif de cette analyse est de caractériser et de quantifier les formes de relief grâce à la technique des *geomorphons* pour trois bassins-versants montagnards. Les trois bassins choisis sont le [Ribérot](https://fr.wikipedia.org/wiki/Riberot){target="_blank"} dans les Pyrénées, la [Séveraisse](https://fr.wikipedia.org/wiki/S%C3%A9veraisse){target="_blank"} dans les Alpes et la [Tarentaine](https://fr.wikipedia.org/wiki/Tarentaine){target="_blank"} dans le Massif Central. Ces trois bassins sont faiblement anthropisés et présentent des formes de reliefs et des altitudes variées. Pour chacun de ces bassins, la proportion de chaque classe de relief sera calculée. Nous tenterons ainsi de voir si les trois bassins partagent des traits communs et les possibles spécificités topographiques de chacun.
 
 # Outil utilisé et données
 
 ## L'algorithme *Geomorphons*
 
-L'algorithme *Geomorphons* est disponible dans QGIS *via* les logiciels [GRASS GIS](https://grass.osgeo.org/grass82/manuals/r.geomorphon.html), [SAGA GIS](https://saga-gis.sourceforge.io/saga_tool_doc/7.3.0/ta_lighting_8.html) ou encore [WhiteboxTools](https://giswqs.github.io/whiteboxR/reference/wbt_geomorphons.html). 
+L'algorithme *Geomorphons* est disponible dans QGIS *via* les logiciels [GRASS GIS](https://grass.osgeo.org/grass82/manuals/r.geomorphon.html){target="_blank"}, [SAGA GIS](https://saga-gis.sourceforge.io/saga_tool_doc/7.3.0/ta_lighting_8.html){target="_blank"} ou encore [WhiteboxTools](https://www.whiteboxgeo.com/manual/wbt_book/available_tools/geomorphometric_analysis.html){target="_blank"}. 
 
-Nous avons décidé d'employer le module proposé par GRASS GIS. Pour ce faire, nous exploitons la librairie *QGIS process* qui permet d'utiliser facilement des algorithmes de QGIS depuis R. Ainsi, *Geomorphons* est appelé dans R *via* la librairie *qgisprocess*.
+Nous avons décidé d'employer le module proposé par GRASS GIS. Pour ce faire, nous exploitons la librairie *QGIS process* qui permet d'utiliser facilement des algorithmes de QGIS depuis R. Ainsi, *Geomorphons* est appelé dans R *via* la librairie *`qgisprocess`*.
 
-La première chose à faire est d'installer cette librairie. Elle n'est pas disponible sur les dépôts officiels, il faut donc le faire depuis son dépôt sur GitHub. Pour ce faire, il faut suivre la démarche proposée  [ici](https://paleolimbot.github.io/qgisprocess/).
+La première chose à faire est d'installer cette librairie. Elle n'est pas disponible sur les dépôts officiels, il faut donc le faire depuis son dépôt sur GitHub. Pour ce faire, il faut suivre la démarche proposée  [ici](https://github.com/r-spatial/qgisprocess){target="_blank"}.
 
 ```{r message=FALSE, eval=TRUE, warning=FALSE, echo=TRUE, results='hide'}
 if (!require("remotes")) install.packages("remotes")
- remotes::install_github("paleolimbot/qgisprocess")
+ remotes::install_github("r-spatial/qgisprocess")
 ```
 
 Pour vérifier sa bonne installation, il est possible d'afficher la configuration de l'installation, comme présenté ci-dessous.
@@ -122,21 +124,23 @@ Pour vérifier sa bonne installation, il est possible d'afficher la configuratio
 library(qgisprocess)
 qgis_configure()
 
-# Pour pouvoir utiliser l'algorithme r.geomorphon il est important d'activer le plugin grassprovider qui nous permettra de l'appeler dans R. Pour ce faire utiliser la fonction :
+# Pour pouvoir utiliser l'algorithme r.geomorphon :
+# Activer le plugin grassprovider qui nous permettra de l'appeler dans R. 
+# Pour ce faire utiliser la fonction :
 qgis_enable_plugins()
 
 ```
 
 ## Autres packages nécessaires
 
-Six packages R sont requis pour reproduire les analyses présentées dans cette fiche :
+Six packages sont requis pour reproduire les analyses présentées dans cette fiche :
 
-- `sf` pour la manipulation de couches vecteurs
-- `terra` pour la manipulation de rasters
-- `tmap` pour la création de cartes
-- `tidyverse` pour la manipulation de dataframes
-- `reshape2` pour modifier la structure des dataframes
-- `ggplot2` pour les graphiques
+- `sf` pour la manipulation de couches vecteurs;
+- `terra` pour la manipulation de rasters;
+- `tmap` pour la création de cartes;
+- `tidyverse` pour la manipulation de `dataframe`;
+- `reshape2` pour modifier la structure de `dataframe`;
+- `ggplot2` pour les graphiques.
 
 Le code ci-dessous vérifie que toutes les librairies requises sont bien installées. Si ce n'est pas le cas, les installer puis les charger dans la session de travail.
 
@@ -153,7 +157,6 @@ if(length(missing_packages)) install.packages(missing_packages,
 
 # Chargement des packages nécessaires
 lapply(my_packages, library, character.only = TRUE)
-invisible(lapply(my_packages, library,  character.only = TRUE))
 ```
 
 ## Données mobilisées
@@ -165,15 +168,15 @@ Dans ce projet, nous avons besoin de deux types de données :
 
 <br/>
 
-<p class="center">[<span style="font-size: 230%;" class="glyphicon glyphicon-download-alt"></span> <br/> Télécharger les données](https://github.com/rzine-reviews/fiche_rzine_geomorphon/blob/main/data/data.zip)</p>
+<p class="center">[<span style="font-size: 230%;" class="glyphicon glyphicon-download-alt"></span> <br/> Télécharger les données](https://rzine.fr/docs/20230425_geomorphon/data.zip)</p>
 
 <br/>
 
-Pour rejouer l'analyse, décompressez les données contenues dans l'archive [data.zip](https://github.com/rzine-reviews/fiche_rzine_geomorphon/blob/main/data/data.zip)
+Pour rejouer l'analyse, décompressez les données contenues dans l'archive [data.zip](https://rzine.fr/docs/20230425_geomorphon/data.zip)
 
 ### Les bassins-versants issus de la BD Topage® de l'IGN-F
 
-Les limites des bassins-versants proviennent de la [base de données (BD) Topage®](https://www.sandre.eaufrance.fr/actualite/diffusion-de-la-1%C3%A8re-version-de-la-bd-topage%C2%AE-m%C3%A9tropole), référentiel hydrographique français, en remplacement du référentiel BD Carthage®. Au sein de cette base de données, nous téléchargeons la couche *Bassins-versant topographiques - Métropole 2019 - BD Topage®* au format *GeoPackage*. Cette couche se nomme *BassinVersantTopographique_FXX.gpkg*. Nous y trouvons l'attribut *TopoOH* qui contient le toponyme de chaque bassin. Nous nous basons sur cet attribut pour extraire les bassins de cette étude.
+Les limites des bassins-versants proviennent de la [base de données (BD) Topage®](https://www.sandre.eaufrance.fr/actualite/diffusion-de-la-1%C3%A8re-version-de-la-bd-topage%C2%AE-m%C3%A9tropole){target="_blank"}, référentiel hydrographique français, en remplacement du référentiel BD Carthage®. Au sein de cette base de données, nous téléchargeons la couche *Bassins-versant topographiques - Métropole 2019 - BD Topage®* au format *GeoPackage*. Cette couche se nomme *BassinVersantTopographique_FXX.gpkg*. Nous y trouvons l'attribut *TopoOH* qui contient le toponyme de chaque bassin. Nous nous basons sur cet attribut pour extraire les bassins de cette étude.
 
 Pour rappel, nous travaillons ici sur trois bassins-versants : 
 
@@ -183,7 +186,7 @@ Pour rappel, nous travaillons ici sur trois bassins-versants :
 
 ### Le MNT RGE de l'IGN à 5 m
 
-Le calcul des *geomorphons* se fait à partir d'un modèle numérique de terrain. Aujourd'hui, des MNT de très haute résolution sont couramment produits et sont disponibles relativement facilement. L'IGN met à disposition gratuitement des MNT de très haute résolution (1 m, 5 m) sur [l'intégralité du territoire français](https://geoservices.ign.fr/rgealti). Nous travaillons ici sur le MNT à la résolution de 5 m nommé *Référentiel à grande échelle (RGE) ALTI® 5 m*. À l'échelle des bassins étudiés, cette résolution est tout à fait suffisante. Notons que le RGE est concrètement un *modèle numérique d'élévation*, prenant donc en compte notamment les bâtiments et les infrastructures. Néanmoins, les bassins étudiés étant peu anthropisés, nous pouvons nous contenter de cette donnée.
+Le calcul des *geomorphons* se fait à partir d'un modèle numérique de terrain. Aujourd'hui, des MNT de très haute résolution sont couramment produits et sont disponibles relativement facilement. L'IGN met à disposition gratuitement des MNT de très haute résolution (1 m, 5 m) sur [l'intégralité du territoire français](https://geoservices.ign.fr/rgealti){target="_blank"}. Nous travaillons ici sur le MNT à la résolution de 5 m nommé *Référentiel à grande échelle (RGE) ALTI® 5 m*. À l'échelle des bassins étudiés, cette résolution est tout à fait suffisante. Notons que le RGE est concrètement un *modèle numérique d'élévation*, prenant donc en compte notamment les bâtiments et les infrastructures. Néanmoins, les bassins étudiés étant peu anthropisés, nous pouvons nous contenter de cette donnée.
 
 # Mise en application
 
@@ -193,7 +196,7 @@ Nous commençons par préparer nos données afin de disposer d'un MNT à 5 m par
 
 ### Extraction des bassins de la BD TOPAGE®
 
-Nous commençons par charger la couche des bassins-versants à l'échelle de la France métropolitaine issue de la [BD TOPAGE®](https://www.sandre.eaufrance.fr/atlas/srv/fre/catalog.search#/metadata/8885e6fc-9c87-49e7-bd2f-d91f6632e44c). Nous la chargeons sous la forme d'un objet *sf*.
+Nous commençons par charger la couche des bassins-versants à l'échelle de la France métropolitaine issue de la [BD TOPAGE®](https://www.sandre.eaufrance.fr/atlas/srv/fre/catalog.search#/metadata/8885e6fc-9c87-49e7-bd2f-d91f6632e44c){target="_blank"}. Nous la chargeons sous la forme d'un objet *`sf`*.
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Chargement de la couche des bassins de toute la France que nous avons téléchargé au format gpkg
@@ -207,7 +210,7 @@ Cette couche contient un attribut *TopoOH* qui identifie le nom des bassins-vers
 * Séveraisse : *La Séveraisse de sa source au torrent de Navette inclus*
 * Tarentaine : *La Tarentaine (Trentaine) de sa source au confluent de l'Eau Verte*
 
-Par une sélection attributaire, nous individualisons nos trois bassins. Pour ce faire, nous utilisons la fonction *filter* de la librairie *dplyr*.
+Par une sélection attributaire, nous individualisons nos trois bassins. Pour ce faire, nous utilisons la fonction *`filter`* de la librairie *`dplyr`*.
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Extraction du bassin du Ribérot selon son nom
@@ -217,16 +220,18 @@ st_write(riberot, "data_processed/bv_riberot.gpkg", delete_layer = TRUE)
 
 # Extraction du bassin de la Séveraisse
 severaisse <- bv %>% filter(bv$TopoOH == "La Séveraisse de sa source au torrent de Navette inclus")
-st_write(severaisse, "data_processed/bv_severaisse.gpkg", delete_layer = TRUE)
 
 # Extraction du bassin de la Tarentaine 
 tarentaine <- bv %>% filter(bv$TopoOH == "La Tarentaine (Trentaine) de sa source au confluent de l'Eau Verte")
+
+# Enregistrement de deux couches géographiques en format GeoPackage
+st_write(severaisse, "data_processed/bv_severaisse.gpkg", delete_layer = TRUE)
 st_write(tarentaine, "data_processed/bv_tarentaine.gpkg", delete_layer = TRUE)
 ```
 
 ### Création du raster virtuel de MNT
 
-Une fois les limites physiques des bassins-versants individualisées, nous construisons les MNT correspondants. Pour chaque bassin-versant, il est nécessaire de télécharger le MNT de chaque département depuis le site des [Géoservices de l'IGN-F](https://geoservices.ign.fr/rgealti). Pour nos MNT nous partirons sur un pas de 5 mètres. Attention le téléchargement peut être long.
+Une fois les limites physiques des bassins-versants individualisées, nous construisons les MNT correspondants. Pour chaque bassin-versant, il est nécessaire de télécharger le MNT de chaque département depuis le site des [Géoservices de l'IGN-F](https://geoservices.ign.fr/rgealti){target="_blank"}. Pour nos MNT nous partirons sur un pas de 5 mètres. Attention le téléchargement peut être long.
 
 Nos trois bassins se trouvent respectivement dans les départements suivants :
 
@@ -239,8 +244,6 @@ Pour chaque département, le MNT est découpé en dalles carrées. Une fois l'en
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 library(qgisprocess)
-
-# 
 
 # Pour le département de l'Ariège (09)
 
@@ -332,18 +335,22 @@ Nous avons maintenant les limites de nos trois bassins, récupérées grâce à 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
 # Si les limites des bassins ne sont plus chargées dans le projet, nous pouvons les recharger
 # en réactivant les trois lignes suivantes (c'est-à-dire en supprimant le #) :
-#riberot <- st_read("data_processed/bv_riberot.gpkg")
-#severaisse <- st_read("data_processed/bv_severaisse.gpkg")
-#tarentaine <- st_read("data_processed/bv_tarentaine.gpkg")
+# Riberot <- st_read("data_processed/bv_riberot.gpkg")
+# Severaisse <- st_read("data_processed/bv_severaisse.gpkg")
+# Tarentaine <- st_read("data_processed/bv_tarentaine.gpkg")
 
 # Chargement du MNT virtuel de l'Ariège
 dem_09 <- rast("data_processed/RGE_5m_Dep09.vrt")
+
 # Conversion des limites du Ribérot en un objet SpatVector utilisable par terra
 riberot <- vect(riberot)
+
 # Découpage de ce MNT selon l'étendue spatiale des limites du Ribérot
 dem_riberot <- crop(dem_09, riberot)
+
 # Masque du MNT selon les limites du Ribérot
 dem_riberot <- mask(dem_riberot, riberot)
+
 # Export du MNT (facultatif)
 terra::writeRaster(dem_riberot,
       "data_processed/dem_Riberot.tif",
@@ -352,12 +359,16 @@ terra::writeRaster(dem_riberot,
 
 # Chargement du MNT virtuel des Hautes-Alpes
 dem_05 <- rast("data_processed/RGE_5m_Dep05.vrt")
+
 # Conversion des limites de la Séveraisse en un objet SpatVector utilisable par terra
 severaisse <- vect(severaisse)
+
 # Découpage de ce MNT selon l'étendue spatiale des limites de la Severaisse
 dem_severaisse <- crop(dem_05, severaisse)
+
 # Masque du MNT selon les limites de la Severaisse
 dem_severaisse <- mask(dem_severaisse, severaisse)
+
 # Export du MNT (facultatif)
 terra::writeRaster(dem_severaisse,
       "data_processed/dem_Severaisse.tif",
@@ -366,12 +377,16 @@ terra::writeRaster(dem_severaisse,
 
 # Chargement du MNT virtuel du Puy-de-Dôme
 dem_63 <- rast("data_processed/RGE_5m_Dep63.vrt")
+
 # Conversion des limites de la Tarentaine en un objet SpatVector utilisable par terra
 tarentaine <- vect(tarentaine)
+
 # Découpage de ce MNT selon l'étendue spatiale des limites de la Tarentaine
 dem_tarentaine <- crop(dem_63, tarentaine)
+
 # Masque du MNT selon les limites de la Tarentaine
 dem_tarentaine <- mask(dem_tarentaine, tarentaine)
+
 # Export du MNT (facultatif)
 terra::writeRaster(dem_tarentaine,
       "data_processed/dem_Tarentaine.tif",
@@ -383,7 +398,7 @@ Nous disposons maintenant des MNT découpés selon chacun de nos bassins-versant
 
 ## Le traitement *Geomorphons* : détection de 10 formes de relief
 
-À partir du MNT de chaque bassin-versant, nous pouvons lancer l'analyse des formes de relief grâce à l'algorithme *Geomorphons*. Nous utilisons son implémentation dans GRASS GIS à l'aide de la librairie *qgisprocess*. Nous obtenons le raster des 10 formes de relief telles que répertoriées par *Geomorphons* pour chacun de nos bassins.
+À partir du MNT de chaque bassin-versant, nous pouvons lancer l'analyse des formes de relief grâce à l'algorithme *Geomorphons*. Nous utilisons son implémentation dans GRASS GIS à l'aide de la librairie *`qgisprocess`*. Nous obtenons le raster des 10 formes de relief telles que répertoriées par *Geomorphons* pour chacun de nos bassins.
 
 L'utilisateur doit spécifier une distance de recherche, c'est-à-dire la distance maximale sur laquelle une forme de relief doit être recherchée. Ici, nous pouvons la spécifier à 20 pixels, ce qui équivaut à une distance de recherche de 100 mètres, car un pixel mesure 5 mètres de côté.
 
@@ -391,15 +406,18 @@ L'utilisateur doit spécifier une distance de recherche, c'est-à-dire la distan
 # Analyse des geomorphons du Ribérot
 # Définition du chemin et du nom du raster de geomorphons en sortie
 geom_riberot <- "data_processed/geomorphons_Riberot.tif"
+
 qgis_run_algorithm("grass7:r.geomorphon",
                   elevation = dem_riberot,
                   search = 20, # lookup distance/rayon de recherche
                   flat = 1,
                   forms = geom_riberot)
 
+
 # Analyse des geomorphons de la Séveraisse
 # Définition du chemin et du nom du raster de geomorphons en sortie
 geom_severaisse <- "data_processed/geomorphons_Severaisse.tif"
+
 qgis_run_algorithm("grass7:r.geomorphon",
                   elevation = dem_severaisse,
                   search = 20, # lookup distance/rayon de recherche
@@ -409,6 +427,7 @@ qgis_run_algorithm("grass7:r.geomorphon",
 # Analyse des geomorphons de la Tarentaine
 # Définition du chemin et du nom du raster de geomorphons en sortie
 geom_tarentaine <- "data_processed/geomorphons_Tarentaine.tif"
+
 qgis_run_algorithm("grass7:r.geomorphon",
                   elevation = dem_tarentaine,
                   search = 20, # lookup distance/rayon de recherche
@@ -441,6 +460,7 @@ Nous pouvons représenter la répartition géographique des formes de relief de 
 noms = c("", "flat (plan)", "peak/summit (sommet)", "ridge (crête)", "shoulder (haut de versant", 
          "spur (eperon)", "slope (pente)", "hollow (creux de versant)", "footslope (bas de versant)", 
          "valley (fond de vallée)", "pit/depression (dépression)")
+
 couleurs = c("#ffffffff",
              "#dcdcdc", 
              "#380000", 
@@ -457,11 +477,14 @@ couleurs = c("#ffffffff",
 Puis nous utilisons les lignes de commande suivantes :
 
 ```{r, message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
+
 library(terra)
 library(tmap)
+
 # Cartographie du Ribérot
 # Chargement du raster des geomorphons du Ribérot
 geom_riberot <- rast("data_processed/geomorphons_Riberot.tif")
+
 tm_shape(geom_riberot) + 
   tm_raster(style="cat",
             labels=noms,
@@ -471,9 +494,12 @@ tm_shape(geom_riberot) +
   tm_scale_bar(breaks=1) +
   tm_layout(legend.outside=TRUE)
 
+
+
 # Cartographie de la Séveraisse
 # Chargement du raster des geomorphons de la Séveraisse
 geom_severaisse <- rast("data_processed/geomorphons_Severaisse.tif")
+
 tm_shape(geom_severaisse) + 
   tm_raster(style="cat",
             labels=noms,
@@ -486,6 +512,7 @@ tm_shape(geom_severaisse) +
 # Cartographie de la Tarentaine
 # Chargement du raster des geomorphons de la Tarentaine
 geom_tarentaine <- rast("data_processed/geomorphons_Tarentaine.tif")
+
 tm_shape(geom_tarentaine) + 
   tm_raster(style="cat",
             labels=noms,
@@ -503,16 +530,18 @@ Sur les trois bassins, la forme de relief dominante est clairement la "Pente", c
 
 L'idée est maintenant de regarder si ces trois bassins montagnards partagent des traits de reliefs en commun ou s'ils sont très différents. Nous pouvons également nous demander si les deux bassins de haute montagne (Ribérot et Séveraisse) se démarquent par rapport à celui de moyenne montagne (Tarentaine).
 
-Pour cette comparaison, nous calculons la superficie relative occupée par chaque forme de relief dans nos trois bassins. Nous utilisons la fonction *freq()* de la librairie *terra*, qui permet de calculer le nombre de pixels de chaque classe d'un raster et de récupérer ce résultat dans un *dataframe*.
+Pour cette comparaison, nous calculons la superficie relative occupée par chaque forme de relief dans nos trois bassins. Nous utilisons la fonction *`freq()`* de la librairie *terra*, qui permet de calculer le nombre de pixels de chaque classe d'un raster et de récupérer ce résultat dans un *`dataframe`*.
 
 Nous commençons par calculer le nombre de pixels de chaque classe pour le raster de *geomorphons* du Ribérot.
 
 ```{r message=FALSE, warning=FALSE}
 relief_riberot <- freq(geom_riberot)
+
+# Affichage de la table
 knitr::kable(relief_riberot, format = "html")
 ```
 
-Nous obtenons bien un dataframe à trois colonnes. La première colonne (*layer*) est utile seulement si nous travaillons sur un raster multibande, ce qui n'est pas le cas ici. La deuxième colonne (*value*) contient le nom des classes et la troisième (*count*) le nombre de pixels de chaque classe. Nous allons créer une nouvelle colonne nommée simplement *Ribérot* dans laquelle nous allons calculer la proportion de chaque classe, ce qui nous permettra de faire des comparaisons entre les bassins.
+Nous obtenons bien un `dataframe` à trois colonnes. La première colonne (*layer*) est utile seulement si nous travaillons sur un raster multibande, ce qui n'est pas le cas ici. La deuxième colonne (*value*) contient le nom des classes et la troisième (*count*) le nombre de pixels de chaque classe. Nous allons créer une nouvelle colonne nommée simplement *Ribérot* dans laquelle nous allons calculer la proportion de chaque classe, ce qui nous permettra de faire des comparaisons entre les bassins.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -520,6 +549,8 @@ relief_riberot$Ribérot <- relief_riberot$count / sum(relief_riberot$count)
 
 # Nous en profitons pour enlever les colonnes inutiles
 relief_riberot <- relief_riberot %>% select(-one_of('layer', 'count'))
+
+# Affichage de la table
 knitr::kable(relief_riberot, format = "html")
 ```
 
@@ -528,38 +559,45 @@ Nous procédons de même pour les deux autres bassins-versants.
 ```{r message=FALSE, warning=FALSE}
 # Pour la Séveraisse
 relief_severaisse <- freq(geom_severaisse)
-
 relief_severaisse$Séveraisse <- relief_severaisse$count / sum(relief_severaisse$count)
 relief_severaisse <- relief_severaisse %>% select(-one_of('layer', 'count')) 
+
+# Affichage de la table
 knitr::kable(relief_severaisse, format = "html")
 
 # Pour la Tarentaine
 relief_tarentaine <- freq(geom_tarentaine)
-
 relief_tarentaine$Tarentaine <- relief_tarentaine$count / sum(relief_tarentaine$count)
-relief_tarentaine <- relief_tarentaine %>% select(-one_of('layer', 'count')) 
+relief_tarentaine <- relief_tarentaine %>% select(-one_of('layer', 'count'))
+
+# Affichage de la table
 knitr::kable(relief_tarentaine, format = "html")
 ```
 
-Nous assemblons maintenant ces trois *dataframes* en un seul *via* une jointure attributaire sur le champ *value*. Nous pouvons ainsi comparer les proportions de chaque classe de relief dans nos bassins.
+Nous assemblons maintenant ces trois *`dataframes`* en un seul *via* une jointure attributaire sur le champ *value*. Nous pouvons ainsi comparer les proportions de chaque classe de relief dans nos bassins.
 
 ```{r message=FALSE, warning=FALSE}
 # Création d'une liste contenant les trois dataframes
 relief_bassins <- list(relief_riberot, relief_severaisse, relief_tarentaine)
+
 # Grâce à la fonction "reduce" de la librairie tidyverse
 # Jointure attributaire sur les dataframes en une seule fois
 relief_bassins <- relief_bassins %>% reduce(full_join, by='value')
 
 # Nous renommons la colonne "value" en "relief"
 relief_bassins <- rename(relief_bassins, 'relief' = 'value')
+
+# Affichage de la table
 knitr::kable(relief_bassins, format = "html")
 ```
 
-À partir de ce *dataframe* groupant les proportions de formes de reliefs des trois bassins, nous traçons des graphiques en bâtons de ces proportions. Nous utilisons la librairie *ggplot2*. Cette librairie prend en entrée les *dataframes* au format *long*, c'est-à-dire des *dataframes* où les données sont organisées en lignes plutôt qu'en colonnes. Nous commençons par transformer le *dataframe* des formes de relief dans ce format grâce à la librairie *reshape2* et à sa fonction *melt*.
+À partir de ce *`dataframe`* groupant les proportions de formes de reliefs des trois bassins, nous traçons des graphiques en bâtons de ces proportions. Nous utilisons la librairie *`ggplot2`*. Cette librairie prend en entrée les *`dataframes`* au format *long*, c'est-à-dire des *`dataframes`* où les données sont organisées en lignes plutôt qu'en colonnes. Nous commençons par transformer le *`dataframe`* des formes de relief dans ce format grâce à la librairie *`reshape2`* et à sa fonction *`melt`*.
 
 ```{r message=FALSE, warning=FALSE}
 relief_bassins_long <- melt(relief_bassins,
                             id.vars = c('relief'))
+
+# Affichage de la table
 knitr::kable(relief_bassins_long, format = "html")
 ```
 
@@ -579,7 +617,7 @@ Au vu de ce graphique, les trois bassins sont largement similaires en termes de 
 
 # Récapitulatif de la méthode proposée
 
-Nous avons mis au point une chaîne de traitement permettant de classifier et de comparer les formes de relief pour différents bassins-versants. La méthode présentée ici part de l'extraction de bassins choisis par l'utilisateur à partir de la couche hydrographique nationale de référence que représente la BD TOPAGE®. Cette chaîne de traitements l'IGN. Ensuite, pour chaque bassin, à partir de son MNT, est calculé le raster des formes de relief grâce à l'algorithme *geomorphons* implémenté dans GRASS GIS, interfacé par QGIS et appelé *via* la librairie *qgisprocess* de R. Pour finir, les résultats ont été représentés sous forme de cartes et de graphiques en bâtons groupés.
+Nous avons mis au point une chaîne de traitement permettant de classifier et de comparer les formes de relief pour différents bassins-versants. La méthode présentée ici part de l'extraction de bassins choisis par l'utilisateur à partir de la couche hydrographique nationale de référence que représente la BD TOPAGE®. Cette chaîne de traitements l'IGN. Ensuite, pour chaque bassin, à partir de son MNT, est calculé le raster des formes de relief grâce à l'algorithme *geomorphons* implémenté dans GRASS GIS, interfacé par QGIS et appelé *via* la librairie *`qgisprocess`* de R. Pour finir, les résultats ont été représentés sous forme de cartes et de graphiques en bâtons groupés.
 
 ## Info session  {-}
 
