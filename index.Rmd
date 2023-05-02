@@ -619,11 +619,56 @@ Au vu de ce graphique, les trois bassins sont largement similaires en termes de 
 
 Nous avons mis au point une chaîne de traitement permettant de classifier et de comparer les formes de relief pour différents bassins-versants. La méthode présentée ici part de l'extraction de bassins choisis par l'utilisateur à partir de la couche hydrographique nationale de référence que représente la BD TOPAGE®. Cette chaîne de traitements l'IGN. Ensuite, pour chaque bassin, à partir de son MNT, est calculé le raster des formes de relief grâce à l'algorithme *geomorphons* implémenté dans GRASS GIS, interfacé par QGIS et appelé *via* la librairie *`qgisprocess`* de R. Pour finir, les résultats ont été représentés sous forme de cartes et de graphiques en bâtons groupés.
 
-## Info session  {-}
+
+
+
+
+
+# Bibliographie {-}
+
+<div id="refs"></div>
+
+
+
+# Annexes {-}
+
+## Infos session  {-}
 
 ```{r session_info, echo=FALSE}
 kableExtra::kable_styling(knitr::kable(rzine::sessionRzine()[[1]], row.names = F))
 kableExtra::kable_styling(knitr::kable(rzine::sessionRzine()[[2]], row.names = F))
 ```
 
-# Bibliographie
+## Citation {-}
+
+```{r Citation, echo=FALSE}
+
+rref <- bibentry(
+   bibtype = "misc",
+   title = "Caractérisation des formes du relief à l’échelle de bassins-versants",
+   author = c("Olivier Theureaux", "Paul Passy", "Thierry Feuillet", "Déborah Birre"),
+   doi = "10.48645/xxxx-xxx",
+   url = "https://rzine.fr/publication_rzine/20230425_geomorphon/",
+   keywords ="FOS: Other social sciences",
+   language = "fr",
+   publisher = "FR2007 CIST",
+   year = 2023,
+   copyright = "Creative Commons Attribution Share Alike 4.0 International")
+
+``` 
+
+`r capture.output(print(rref))`
+
+
+### BibTex : {-}
+
+```{r generateBibTex, echo=FALSE}
+writeLines(toBibtex(rref), "cite.bib")
+toBibtex(rref)
+``` 
+
+<br/>
+
+
+
+
