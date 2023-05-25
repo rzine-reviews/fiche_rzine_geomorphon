@@ -2,7 +2,7 @@
 title: "Caractérisation des formes du relief à l'échelle de bassins-versants"
 subtitle: "Analyse quantitative des formes du relief *via* l'algorithme *Geomorphons* pour trois bassins-versants montagnards"
 # date: "2022-09-30"
-date: "`r Sys.Date()`"
+date: "2023-05-02"
 author: 
  - name: Olivier Theureaux
    affiliation: UMR LADYSS, CNRS
@@ -25,7 +25,7 @@ nocite : |
 link_citations: true
 github: "rzine-reviews/fiche_rzine_geomorphon"
 # gitlab: "gitlab.huma-num.fr/author/repository"
-doi: ""
+doi: "10.48645/s8je-kz92"
 licence: "by-sa"
 ---
 
@@ -642,19 +642,18 @@ kableExtra::kable_styling(knitr::kable(rzine::sessionRzine()[[2]], row.names = F
 ## Citation {-}
 
 ```{r Citation, echo=FALSE}
-
 rref <- bibentry(
    bibtype = "misc",
    title = "Caractérisation des formes du relief à l’échelle de bassins-versants",
+   subtitle = "Analyse quantitative des formes du relief via l’algorithme Geomorphons pour trois bassins-versants montagnards",
    author = c("Olivier Theureaux", "Paul Passy", "Thierry Feuillet", "Déborah Birre"),
-   doi = "10.48645/xxxx-xxx",
+   doi = "10.48645/s8je-kz92",
    url = "https://rzine.fr/publication_rzine/20230425_geomorphon/",
    keywords ="FOS: Other social sciences",
    language = "fr",
    publisher = "FR2007 CIST",
    year = 2023,
    copyright = "Creative Commons Attribution Share Alike 4.0 International")
-
 ``` 
 
 `r capture.output(print(rref))`
