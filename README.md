@@ -1,4 +1,4 @@
-# Caractérisation des formes du relief à l’échelle de bassins-versants [<img src="https://rzine.fr/img/Rzine_logo.png"  align="right" width="120"/>](http://rzine.fr/)
+# Caractérisation des formes du relief à l’échelle de bassins-versants  [<img src="https://rzine.fr/assets/img/rzine.png"  align="right" width="120"/>](http://rzine.fr/)
 ### Analyse quantitative des formes du relief via l’algorithme Geomorphon pour trois bassins-versants montagnards
 **Auteur·es :**   
 Olivier Theureaux (UMR LADYSS, CNRS)   
